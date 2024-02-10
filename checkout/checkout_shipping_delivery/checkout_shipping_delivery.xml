@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="2.5" method="upgrade" group="hikashop">
+	<name>HikaShop Checkout Shipping Delivery plugin</name>
+	<hikainstall ordering="0" enable="1" report="0" />
+	<creationDate>29 11 2022</creationDate>
+	<version>1.0.0</version>
+	<author>Obsidev</author>
+	<authorEmail>dev@obsidev.com</authorEmail>
+	<authorUrl>http://www.obsidev.com</authorUrl>
+	<copyright>Copyright (C) 2012-2022 OBSIDEV SARL - All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<description>This plugin allows to display shipping delivery address during checkout</description>
+	<files>
+		<filename plugin="checkout_shipping_delivery">checkout_shipping_delivery.php</filename>
+		<filename>checkout_shipping_delivery_ctrl.php</filename>
+		<folder>views</folder>
+		<filename>index.html</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB/en-GB.plg_hikashop_checkout_shipping_delivery.ini</language>
+	</languages>
+	<params addpath="/components/com_hikashop/params">
+		<param name="pluginoptions" type="pluginoptions" default="plugin" label="hikashop" description="HikaShop options" />
+	</params>
+	<config>
+		<fields name="params" addfieldpath="/components/com_hikashop/fields">
+			<fieldset name="basic">
+				<field id="pluginoptions" name="pluginoptions" type="pluginoptions" label="hikashop" description="HikaShop options" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="2.5" method="upgrade" group="hikashop">
+    <name>HikaShop Checkout Upload Purchase Order</name>
+    <hikainstall ordering="0" enable="1" report="0" />
+    <creationDate>29 11 2022</creationDate>
+    <version>1.0.0</version>
+    <author>Obsidev</author>
+    <authorEmail>dev@obsidev.com</authorEmail>
+    <authorUrl>http://www.obsidev.com</authorUrl>
+    <copyright>Copyright (C) 2012-2022 OBSIDEV SARL - All rights reserved.</copyright>
+    <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+    <description>This plugin Upload Purchase Order.</description>
+    <files>
+        <filename plugin="Checkout_order">checkout_order.php</filename>
+        <filename>checkout_order_ctrl.php</filename>
+        <folder>views</folder>
+        <filename>index.html</filename>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.plg_hikashop_checkout_order.ini</language>
+    </languages>
+    <views>
+        <view type="html">
+            <name>checkout_order</name>
+            <title>checkout Upload Purchase Order</title>
+        </view>
+    </views>
+    <checkoutsteps>
+        <checkoutstep view="checkout_order" ordering="1" name="plg.order" title="Upload Purchase Order" description="My purchase order" />
+    </checkoutsteps>
+    <params addpath="/components/com_hikashop/params">
+        <param name="pluginoptions" type="pluginoptions" default="plugin" label="hikashop" description="HikaShop options" />
+    </params>
+    <config>
+        <fields name="params" addfieldpath="/components/com_hikashop/fields">
+            <fieldset name="basic">
+                <field id="pluginoptions" name="pluginoptions" type="pluginoptions" label="hikashop" description="HikaShop options" />
+            </fieldset>
+        </fields>
+    </config>
+</extension>
+
