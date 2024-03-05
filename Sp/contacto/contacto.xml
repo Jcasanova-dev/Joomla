@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.8" type="plugin" group="sppagebuilder" method="upgrade">
+	<name>Form Contacto Addon Plugin - SP Page Builder</name>
+	<author>JoomShaper</author>
+	<creationDate>22 Sep 2022</creationDate>
+	<authorEmail>support(at)joomshaper.com</authorEmail>
+	<authorUrl>https://www.joomshaper.com</authorUrl>
+	<copyright>Copyright (C) 2010 - 2022 JoomShaper. All rights reserved.</copyright>
+	<license>GNU/GPL V2 or Later</license>
+	<description>Form Contacto addon plugin for SP Page Builder</description>
+	<version>2.0.0</version>
+
+	<files>
+		<filename plugin="contacto">contacto.php</filename>
+		<folder>addons</folder>
+	</files>
+
+</extension>
