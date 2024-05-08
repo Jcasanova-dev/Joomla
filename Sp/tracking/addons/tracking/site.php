@@ -2372,9 +2372,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $output .= '<div class="img-container"><img id="img6" class="img img6 " src="https://mwt.one/images/estatus/carpeta-amarilla.png" alt="Imagen de estatus6" title="Status/Pago"><p class="status-text ">Status/Pago</p></div>';
                 $output .= '</div>';
                 $output .= '<script>';
-                
                 $output .= 'let currentImage = null;';
-                
                 $output .= 'const addActiveClass = (image) => {';
                     $output .= '  if (currentImage) {';
                     $output .= '    currentImage.classList.remove("active3");';
@@ -2382,33 +2380,25 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '  image.classList.add("active3");';
                     $output .= '  currentImage = image;';
                     $output .= '};';
-                    
                     $output .= 'document.getElementById("img1").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    
                     $output .= 'document.getElementById("img2").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    
                     $output .= 'document.getElementById("img3").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    
                     $output .= 'document.getElementById("img4").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    
                     $output .= 'document.getElementById("img5").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    
-                    // Set the active3 class for the fourth image when the page is loaded
                     $output .= 'document.addEventListener("DOMContentLoaded", function() {';
                     $output .= '  const img5 = document.getElementById("img5");';
                     $output .= '  addActiveClass(img5);';
                     $output .= '});';
-                    
                     $output .= '</script>';
             $output .= '<section id="section1" style="display:none;">';
             $fecha = $this->getfechapro($order_number);
