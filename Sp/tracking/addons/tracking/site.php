@@ -40,7 +40,9 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $number_purchase = $this->getNumber($order_number);
             $filePathRelatives = $this->getUploadedFiles($order_number);
             $output .= '<div style="display: flex; justify-content: space-around;">';
-            $output .= '<div class="img-container"><img id="img1" class="img img1" src="https://mwt.one/images/estatus/carpeta-azul.png" alt="Imagen de estatus" title="Creacion/Credito"><p class="status-text">Creacion/Credito</p>';
+            $output .= '<div class="tab blue-tab active3" id="tab1" style="text-align: center;">';
+            $output .= '<span>Creacion/Credito</span><br>';
+            $output .= '<div style="display: inline-block; margin-left: 3px;">'; // Contenedor para centrar el contenido y mover la imagen
             if (empty($number_purchase) && empty($filePathRelatives)) {
                 // Si ambos están vacíos, mostrar la imagen roja
                 $output .= '<img src="https://mwt.one/images/estatus/rojo.png" alt="Rojo" title="Sin Información" style="width: 20px; height: 20px;">';
@@ -49,31 +51,36 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             } else {
                 $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
             }
+            $output .= '</div>'; // Cierre del contenedor para centrar el contenido y mover la imagen
+            $output .= '</div>';            
+            $output .= '<div class="tab green-tab" id="tab2">Producción</div>';
+            $output .= '<div class="tab purple-tab" id="tab3">Preparación</div>';
+            $output .= '<div class="tab pink-tab" id="tab4">Despacho</div>';
+            $output .= '<div class="tab orange-tab" id="tab5">Transito</div>';
+            $output .= '<div class="tab yellow-tab" id="tab6">Status/Pago</div>';
             $output .= '</div>';
-            $output .= '<div class="img-container"><img id="img2" class="img img2 " src="https://mwt.one/images/estatus/carpeta-morada.png" alt="Imagen de estatus" title="Producción"><p class="status-text ">Producción</p></div>';
-            $output .= '<div class="img-container"><img id="img3" class="img img3 " src="https://mwt.one/images/estatus/carrpeta-naranja.png" alt="Imagen de estatus4" title="Preparación"><p class="status-text ">Preparación</p></div>';
-            $output .= '<div class="img-container"><img id="img4" class="img img4 " src="https://mwt.one/images/estatus/carrpeta-negra.png" alt="Imagen de estatus5" title="Despacho"><p class="status-text ">Despacho</p></div>';
-            $output .= '<div class="img-container"><img id="img5" class="img img5 " src="https://mwt.one/images/estatus/carpeta-purrpura.png" alt="Imagen de estatus6" title="Transito"><p class="status-text ">Transito</p></div>';
-            $output .= '<div class="img-container"><img id="img6" class="img img6 " src="https://mwt.one/images/estatus/carpeta-amarilla.png" alt="Imagen de estatus6" title="Status/Pago"><p class="status-text ">Status/Pago</p></div>';
-            $output .= '</div>';
-            $output .= '<script>'; 
-                $output .= 'let currentImage = null;';
-                $output .= 'const addActiveClass = (image) => {';
-                $output .= '  if (currentImage) {';
-                $output .= '    currentImage.classList.remove("active3");';
-                $output .= '  }';
-                $output .= '  image.classList.add("active3");';
-                $output .= '  currentImage = image;';
-                $output .= '};';
-                $output .= 'document.getElementById("img1").addEventListener("click", function() {';
-                $output .= '  addActiveClass(this);';
-                $output .= '});';
-                $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-                $output .= '  const img1 = document.getElementById("img1");';
-                $output .= '  addActiveClass(img1);';
-                $output .= '});';
+            $output .= '<script>';
+            $output .= 'let currentTab = null;';
+            $output .= 'const addActiveClass = (tab) => {';
+            $output .= '  if (currentTab) {';
+            $output .= '    currentTab.classList.remove("active3");';
+            $output .= '  }';
+            $output .= '  tab.classList.add("active3");';
+            $output .= '  currentTab = tab;';
+            $output .= '};';
+            $output .= 'document.getElementById("tab1").addEventListener("click", function() {';
+            $output .= '  addActiveClass(this);';
+            $output .= '});';
+            $output .= 'document.addEventListener("DOMContentLoaded", function() {';
+            $output .= '  const tab1 = document.getElementById("tab1");';
+            $output .= '  addActiveClass(tab1);';
+            $output .= '});';
             $output .= '</script>';
-            $output .= '<section id="section1" style="display:none;">';
+            if (empty($filePathRelatives)){
+            $output .= '<section id="section1" class="tab-content">';
+            }else{
+                $output .= '<section id="section1" class="tab-content-1">';
+            }
             $output .= '<div>';
             $output .= '<br>';
             $output .= '<label for="number_pedido">Número de Pedido</label>';
@@ -137,61 +144,69 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     '</div>' .
                     '</div>';
             }
-            $output .= '</div>';
-            $output .= '</div>';
             $output .= '<div class="button-group">';
+            
             $output .= '<input type="submit" name="upload_form" class="btn btn-primary" value="Enviar">';
             $output .= '</div>';
+            
             $output .= '</section>';
             $output .= '<script>';
             $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-            $output .= '    var img1 = document.querySelector(".img1");';
+            $output .= '    var tab1 = document.getElementById("tab1");'; // Corregido: selecciona por ID
             $output .= '    var section1 = document.getElementById("section1");';
-            $output .= '    img1.addEventListener("click", function() {';
+            $output .= '    tab1.addEventListener("click", function() {';
             $output .= '        section1.style.display = "block";';
             $output .= '    });';
             $output .= '});';
             $output .= '</script>';
+
 
         }elseif ($status == 'credito') {
            if ($this->isSameCustomer($order_number, $userId)){
             $number_purchase = $this->getNumber($order_number);
             $filePathRelatives = $this->getUploadedFiles($order_number);
             $output .= '<div style="display: flex; justify-content: space-around;">';
-            $output .= '<div class="img-container"><img id="img1" class="img img1" src="https://mwt.one/images/estatus/carpeta-azul.png" alt="Imagen de estatus" title="Creacion/Credito"><p class="status-text">Creacion/Credito</p>';
+            $output .= '<div class="tab blue-tab active3" id="tab1" style="text-align: center;">';
+            $output .= '<span>Creacion/Credito</span><br>';
+            $output .= '<div style="display: inline-block; margin-left: 3px;">'; // Contenedor para centrar el contenido y mover la imagen
             if (empty($number_purchase) && empty($filePathRelatives)) {
                 // Si ambos están vacíos, mostrar la imagen roja
                 $output .= '<img src="https://mwt.one/images/estatus/rojo.png" alt="Rojo" title="Sin Información" style="width: 20px; height: 20px;">';
             } elseif (!empty($number_purchase) || !empty($filePathRelatives)) {
-                $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
+                $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 20px; height: 20px;">';
             } else {
                 $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
             }
+            $output .= '</div>'; // Cierre del contenedor para centrar el contenido y mover la imagen
+            $output .= '</div>';            
+            $output .= '<div class="tab green-tab" id="tab2">Producción</div>';
+            $output .= '<div class="tab purple-tab" id="tab3">Preparación</div>';
+            $output .= '<div class="tab pink-tab" id="tab4">Despacho</div>';
+            $output .= '<div class="tab orange-tab" id="tab5">Transito</div>';
+            $output .= '<div class="tab yellow-tab" id="tab6">Status/Pago</div>';
             $output .= '</div>';
-            $output .= '<div class="img-container"><img id="img2" class="img img2 " src="https://mwt.one/images/estatus/carpeta-morada.png" alt="Imagen de estatus" title="Producción"><p class="status-text ">Producción</p></div>';
-            $output .= '<div class="img-container"><img id="img3" class="img img3 " src="https://mwt.one/images/estatus/carrpeta-naranja.png" alt="Imagen de estatus4" title="Preparación"><p class="status-text ">Preparación</p></div>';
-            $output .= '<div class="img-container"><img id="img4" class="img img4 " src="https://mwt.one/images/estatus/carrpeta-negra.png" alt="Imagen de estatus5" title="Despacho"><p class="status-text ">Despacho</p></div>';
-            $output .= '<div class="img-container"><img id="img5" class="img img5 " src="https://mwt.one/images/estatus/carpeta-purrpura.png" alt="Imagen de estatus6" title="Transito"><p class="status-text ">Transito</p></div>';
-            $output .= '<div class="img-container"><img id="img6" class="img img6 " src="https://mwt.one/images/estatus/carpeta-amarilla.png" alt="Imagen de estatus6" title="Status/Pago"><p class="status-text ">Status/Pago</p></div>';
-            $output .= '</div>';
-            $output .= '<script>'; 
-                $output .= 'let currentImage = null;';
-                $output .= 'const addActiveClass = (image) => {';
-                $output .= '  if (currentImage) {';
-                $output .= '    currentImage.classList.remove("active3");';
-                $output .= '  }';
-                $output .= '  image.classList.add("active3");';
-                $output .= '  currentImage = image;';
-                $output .= '};';
-                $output .= 'document.getElementById("img1").addEventListener("click", function() {';
-                $output .= '  addActiveClass(this);';
-                $output .= '});';
-                $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-                $output .= '  const img1 = document.getElementById("img1");';
-                $output .= '  addActiveClass(img1);';
-                $output .= '});';
+            $output .= '<script>';
+            $output .= 'let currentTab = null;';
+            $output .= 'const addActiveClass = (tab) => {';
+            $output .= '  if (currentTab) {';
+            $output .= '    currentTab.classList.remove("active3");';
+            $output .= '  }';
+            $output .= '  tab.classList.add("active3");';
+            $output .= '  currentTab = tab;';
+            $output .= '};';
+            $output .= 'document.getElementById("tab1").addEventListener("click", function() {';
+            $output .= '  addActiveClass(this);';
+            $output .= '});';
+            $output .= 'document.addEventListener("DOMContentLoaded", function() {';
+            $output .= '  const tab1 = document.getElementById("tab1");';
+            $output .= '  addActiveClass(tab1);';
+            $output .= '});';
             $output .= '</script>';
-            $output .= '<section id="section1" style="display:none;">';
+            if (empty($filePathRelatives)){
+                $output .= '<section id="section1" class="tab-content">';
+                }else{
+                    $output .= '<section id="section1" class="tab-content-1">';
+                }
             $output .= '<div>';
             $output .= '<br>';
             $output .= '<label for="number_pedido">Número de Pedido</label>';
@@ -306,9 +321,9 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $output .= '</section>';
             $output .= '<script>';
             $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-            $output .= '    var img1 = document.querySelector(".img1");';
+            $output .= '    var tab1 = document.getElementById("tab1");'; // Corregido: selecciona por ID
             $output .= '    var section1 = document.getElementById("section1");';
-            $output .= '    img1.addEventListener("click", function() {';
+            $output .= '    tab1.addEventListener("click", function() {';
             $output .= '        section1.style.display = "block";';
             $output .= '    });';
             $output .= '});';
@@ -325,10 +340,15 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $number = $this->getsap($order_number);
                 $fecha = $this->getfechapro($order_number);
                 $output .= '<div style="display: flex; justify-content: space-around;">';
-                $output .= '<div class="img-container"><img id="img1" class="img img1" src="https://mwt.one/images/estatus/carpeta-azul.png" alt="Imagen de estatus" title="Creacion/Credito"><p class="status-text">Creacion/Credito</p>';
+                $output .= '<div class="tab blue-tab" id="tab1" style="text-align: center;">';
+                $output .= '<span>Creacion/Credito</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img2" class="img img2 " src="https://mwt.one/images/estatus/carpeta-morada.png" alt="Imagen de estatus" title="Producción"><p class="status-text ">Producción</p>';
+                $output .= '</div>';
+                $output .= '<div class="tab green-tab" id="tab2" style="text-align: center;">';
+                $output .= '<span>Producción</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if (!empty($number) && !empty($fecha)) {
                     // Si ambos tienen datos, mostrar la imagen verde
                     $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
@@ -340,33 +360,33 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
                 }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img3" class="img img3 " src="https://mwt.one/images/estatus/carrpeta-naranja.png" alt="Imagen de estatus4" title="Preparación"><p class="status-text ">Preparación</p></div>';
-                $output .= '<div class="img-container"><img id="img4" class="img img4 " src="https://mwt.one/images/estatus/carrpeta-negra.png" alt="Imagen de estatus5" title="Despacho"><p class="status-text ">Despacho</p></div>';
-                $output .= '<div class="img-container"><img id="img5" class="img img5 " src="https://mwt.one/images/estatus/carpeta-purrpura.png" alt="Imagen de estatus6" title="Transito"><p class="status-text ">Transito</p></div>';
-                $output .= '<div class="img-container"><img id="img6" class="img img6 " src="https://mwt.one/images/estatus/carpeta-amarilla.png" alt="Imagen de estatus6" title="Status/Pago"><p class="status-text ">Status/Pago</p></div>';
+                $output .= '</div>';
+                $output .= '<div class="tab purple-tab" id="tab3">Preparación</div>';
+                $output .= '<div class="tab pink-tab" id="tab4">Despacho</div>';
+                $output .= '<div class="tab orange-tab" id="tab5">Transito</div>';
+                $output .= '<div class="tab yellow-tab" id="tab6">Status/Pago</div>';
                 $output .= '</div>';
                 $output .= '<script>';
                 $output .= 'let currentImage = null;';
-                $output .= 'const addActiveClass = (image) => {';
+                $output .= 'const addActiveClass = (tab) => {';
                     $output .= '  if (currentImage) {';
                     $output .= '    currentImage.classList.remove("active3");';
                     $output .= '  }';
-                    $output .= '  image.classList.add("active3");';
-                    $output .= '  currentImage = image;';
+                    $output .= '  tab.classList.add("active3");';
+                    $output .= '  currentImage = tab;';
                     $output .= '};';
-                    $output .= 'document.getElementById("img1").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab1").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    $output .= 'document.getElementById("img2").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab2").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
                     $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-                    $output .= '  const img2 = document.getElementById("img2");';
-                    $output .= '  addActiveClass(img2);';
+                    $output .= '  const tab2 = document.getElementById("tab2");';
+                    $output .= '  addActiveClass(tab2);';
                     $output .= '});';
                     $output .= '</script>';
-
-            $output .= '<section id="section1" style="display:none;">';
+            $output .= '<section id="section1" class="tab-content-1" style="display:none;">';
             $output .= '<div>';
             $output .= '<br>';
             $output .= '<label for="number_pedido">Número de Pedido</label>';
@@ -418,7 +438,12 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $output .= '<input type="text" id="tyme_credit" name="tyme_credit" value="' . htmlspecialchars($orderFullPrice) . '" readonly>';
             $output .= '</div>';
             $output .= '</section>';
-            $output .= '<section id="section2" style="display:none;">';
+            $filePathRelative2 = $this->getUploadedFiles4($order_number);
+            if (empty($filePathRelative2)){
+            $output .= '<section id="section2" class="tab-content2">';
+            }else{
+                $output .= '<section id="section2" class="tab-content2-1">';
+            }
             $output .= '<div>';
             $output .= '<br>';
             if ($titulo == 'Administrator'){
@@ -556,22 +581,23 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
         $output .= '</section>';
         $output .= '<script>';
         $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-        $output .= '    var img1 = document.querySelector(".img1");';
-        $output .= '    var img2 = document.querySelector(".img2");';
+        $output .= '    var tab1 = document.querySelector(".tab.blue-tab#tab1");';
+        $output .= '    var tab2 = document.querySelector(".tab.green-tab#tab2");';
         $output .= '    var section1 = document.getElementById("section1");';
         $output .= '    var section2 = document.getElementById("section2");';
         $output .= '    ';
-        $output .= '    img1.addEventListener("click", function() {';
+        $output .= '    tab1.addEventListener("click", function() {';
         $output .= '        section1.style.display = "block";';
         $output .= '        section2.style.display = "none";';
         $output .= '    });';
         $output .= '    ';
-        $output .= '    img2.addEventListener("click", function() {';
+        $output .= '    tab2.addEventListener("click", function() {';
         $output .= '        section1.style.display = "none";';
         $output .= '        section2.style.display = "block";';
         $output .= '    });';
         $output .= '});';
         $output .= '</script>';
+
         }else{
             $output .= '<div>';
             $output .= '<p>Lo siento, no tienes permiso para ver este pedido.</p>';
@@ -587,10 +613,15 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $datos = $this->getmethodoshipping($order_number);
                 $envios = $this->getUploadedFiles15($order_number);
                 $output .= '<div style="display: flex; justify-content: space-around;">';
-                $output .= '<div class="img-container"><img id="img1" class="img img1" src="https://mwt.one/images/estatus/carpeta-azul.png" alt="Imagen de estatus" title="Creacion/Credito"><p class="status-text">Creacion/Credito</p>';
+                $output .= '<div class="tab blue-tab" id="tab1" style="text-align: center;">';
+                $output .= '<span>Creacion/Credito</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img2" class="img img2 " src="https://mwt.one/images/estatus/carpeta-morada.png" alt="Imagen de estatus" title="Producción"><p class="status-text ">Producción</p>';
+                $output .= '</div>';
+                $output .= '<div class="tab green-tab" id="tab2" style="text-align: center;">';
+                $output .= '<span>Producción</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if (!empty($number) && !empty($fecha)) {
                     // Si ambos tienen datos, mostrar la imagen verde
                     $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
@@ -602,7 +633,10 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
                 }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img3" class="img img3 " src="https://mwt.one/images/estatus/carrpeta-naranja.png" alt="Imagen de estatus4" title="Preparación"><p class="status-text ">Preparación</p>';
+                $output .= '</div>';
+                $output .= '<div class="tab purple-tab" id="tab3"  style="text-align: center;">';
+                $output .= '<span>Preparación</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if (!empty($packs) && !empty($envios)) {
                     // Si ambos tienen datos, mostrar la imagen verde
                     $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
@@ -614,35 +648,35 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
                 }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img4" class="img img4 " src="https://mwt.one/images/estatus/carrpeta-negra.png" alt="Imagen de estatus5" title="Despacho"><p class="status-text ">Despacho</p></div>';
-                $output .= '<div class="img-container"><img id="img5" class="img img5 " src="https://mwt.one/images/estatus/carpeta-purrpura.png" alt="Imagen de estatus6" title="Transito"><p class="status-text ">Transito</p></div>';
-                $output .= '<div class="img-container"><img id="img6" class="img img6 " src="https://mwt.one/images/estatus/carpeta-amarilla.png" alt="Imagen de estatus6" title="Status/Pago"><p class="status-text ">Status/Pago</p></div>';
+                $output .= '</div>';
+                $output .= '<div class="tab pink-tab" id="tab4">Despacho</div>';
+                $output .= '<div class="tab orange-tab" id="tab5">Transito</div>';
+                $output .= '<div class="tab yellow-tab" id="tab6">Status/Pago</div>';
                 $output .= '</div>';
                 $output .= '<script>';
                 $output .= 'let currentImage = null;';
-                $output .= 'const addActiveClass = (image) => {';
+                $output .= 'const addActiveClass = (tab) => {';
                     $output .= '  if (currentImage) {';
                     $output .= '    currentImage.classList.remove("active3");';
                     $output .= '  }';
-                    $output .= '  image.classList.add("active3");';
-                    $output .= '  currentImage = image;';
+                    $output .= '  tab.classList.add("active3");';
+                    $output .= '  currentImage = tab;';
                     $output .= '};';
-                    $output .= 'document.getElementById("img1").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab1").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    $output .= 'document.getElementById("img2").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab2").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    $output .= 'document.getElementById("img3").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab3").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
                     $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-                    $output .= '  const img3 = document.getElementById("img3");';
-                    $output .= '  addActiveClass(img3);';
+                    $output .= '  const tab3 = document.getElementById("tab3");';
+                    $output .= '  addActiveClass(tab3);';
                     $output .= '});';
                     $output .= '</script>';
-
-            $output .= '<section id="section1" style="display:none;">';
+            $output .= '<section id="section1" class="tab-content-1" style="display:none;">';
             $output .= '<div>';
             $output .= '<br>';
             $output .= '<label for="number_pedido">Número de Pedido</label>';
@@ -695,7 +729,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $output .= '<input type="text" id="tyme_credit" name="tyme_credit" value="' . htmlspecialchars($orderFullPrice) . '" readonly>';
             $output .= '</div>';
             $output .= '</section>';
-            $output .= '<section id="section2" style="display:none;">';
+            $output .= '<section id="section2" class="tab-content2-1" style="display:none;">';
             $output .= '<div>';
             $output .= '<br>';
             $number = $this->getsap($order_number);
@@ -729,7 +763,9 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $output .= '<input type="date" id="fechaf" name="fechaf" value="'.htmlspecialchars($fecha['fechaf']).'" readonly>';
             $output .= '</div>' ;
             $output .= '</section>';
-            $output .= '<section id="section3" style="display:none;">';
+            $packs = $this->getUploadedFiles10($order_number);
+            $tabContentClass = empty($packs) ? 'tab-content3 empty-packs' : 'tab-content3';
+            $output .= '<section id="section3" class="' . $tabContentClass . '">';
             $output .= '<div>';
             $output .= '<br>';
             if ($titulo == 'Administrator') {
@@ -767,12 +803,12 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $output .= '</div>';
                 $packs = $this->getUploadedFiles10($order_number);
                 if (empty($packs)){
-                $output .= '<div>';
-                $output .= '<br>';
-                $output .= '<label for="document_upload">Subir Packing Detallado Caja Por Caja </label>';
-                $output .= '<input type="file" id="document_upload" name="document_upload" accept=".pdf" >';
-                $output .= '<p>Solo se permiten archivos .pdf</p>';
-                $output .= '</div>';
+                    $output .= '<div class="empty-packs">';
+                    $output .= '<br>';
+                    $output .= '<label for="document_upload">Subir Packing Detallado Caja Por Caja </label>';
+                    $output .= '<input type="file" id="document_upload" name="document_upload" accept=".pdf" >';
+                    $output .= '<p>Solo se permiten archivos .pdf</p>';
+                    $output .= '</div>';
                 }
                  //funcion para agregar mas packing list
                  $output .= '<div id="guias">';
@@ -803,17 +839,29 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         foreach ($packs as $pack) {
                             $filePathRelative3 = $this->getUploadedFiles11($order_number, $pack->caja);
                             $output .= '<br>';
-                            $output .= '<div class="' . $addon_id . ' img-container2">' .
-                                '<span class="invoice-number">' . $pack->caja . '</span>' .
-                                '<a href="https://mwt.one' . $filePathRelative3 . '" target="_blank">' .
-                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">' .
-                                '</a>' .
-                                '<button type="submit" name="delete_pack_detallado" class="btn btn-danger" value="' . $pack->caja . '">X</button>' .
-                            '</div>';
+                            $output .= '<div class="img-container2">';
+                            if ($filePathRelative3) {
+                                $output .= '<div class="img-wrapper">';
+                                $output .= '<span class="invoice-number">'.$pack->caja.'</span>';
+                                $output .= '<a href="https://mwt.one' . $filePathRelative3 . '" target="_blank">';
+                                $output .= '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">';
+                                $output .= '</a>';
+                                $output .= '</div>';
+                            }
+                            $output .= '<div class="button-container">';
+                            $output .= '<button type="submit" name="delete_pack_detallado" class="btn btn-danger" value="' . $pack->caja . '">';
+                            $output .= '<i class="fas fa-times"></i>';
+
+                            $output .= '</button>';
+                            $output .= '</div>';
+                            $output .= '</div>';     
+                            
                         }
+                    
                     }
                     $output .= '</div>';   
                 $output .= '<div>';
+                $output .= '<br>';
                 $output .= '<br>';
                 $output .= '<label for="address_selection">Dirección de Envío</label>';
                 $output .= '<div id="address_selection_div">';
@@ -916,37 +964,25 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                             if (!empty($envios)){
                                 foreach ($envios as $envio) {
                                     $filePathRelative4 = $this->getUploadedFiles16($order_number);
-                                    $output .= '<div class="' . $addon_id . ' img-container2">' .
-                                        '<span class="invoice-number">Envio</span>' .
-                                        '<a href="https://mwt.one' . $filePathRelative4 . '" target="_blank">' .
-                                            '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">' .
-                                        '</a>' .
-                                        '<div class="button-group">' . 
-                                    '<button type="submit" name="delete_cotizacion" class="btn btn-danger">' .
-                                        '<i class="fas fa-times"></i>' .
-                                    '</button>' .
-                                '</div>' .
-                                    '</div>';
-                                }
+                                    $output .= '<div class="img-container2">';
+                                    if ($filePathRelative4) {
+                                        $output .= '<div class="img-wrapper">';
+                                        $output .= '<span class="invoice-number">Envio</span>';
+                                        $output .= '<a href="https://mwt.one' . $filePathRelative4 . '" target="_blank">';
+                                        $output .= '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">';
+                                        $output .= '</a>';
+                                        $output .= '</div>';
+                                    }
+                                    $output .= '<div class="button-container">';
+                                    $output .= '<button type="submit" name="delete_cotizacion" class="btn btn-danger">';
+                                    $output .= '<i class="fas fa-times"></i>';
+                                    $output .= '</button>';
+                                    $output .= '</div>';
+                                    $output .= '</div>';                                    
                             }
+                        }
                 $output .= '</div>';        
             }else{
-                $output .= '<br>';
-                $packs = $this->getUploadedFiles10($order_number);
-                $output .= '<div class="' . $addon_id . ' container">'; // Inicio del div contenedor
-                            if (!empty($packs)){
-                                foreach ($packs as $pack) {
-                                    $filePathRelative3 = $this->getUploadedFiles11($order_number, $pack->caja);
-                                    $output .= '<br>';
-                                    $output .= '<div class="' . $addon_id . ' img-container2">' .
-                                        '<span class="invoice-number">' . $pack->caja . '</span>' .
-                                        '<a href="https://mwt.one' . $filePathRelative3 . '" target="_blank">' .
-                                            '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">' .
-                                        '</a>' .
-                                    '</div>';
-                                }
-                            }               
-                $output .= '</div>';
                 $output .= '<div>';
                 $output .= '<br>';
                 $datos = $this->getmethodoshipping($order_number);
@@ -979,6 +1015,34 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 }
                 $output .= '</select>';
                 $output .= '</div>';
+                $packs = $this->getUploadedFiles10($order_number);
+                $output .= '<div class="' . $addon_id . ' container">'; // Inicio del div contenedor
+                            if (!empty($packs)){
+                                foreach ($packs as $pack) {
+                                    $filePathRelative3 = $this->getUploadedFiles11($order_number, $pack->caja);
+                                    $output .= '<div class="img-container2">';
+                                    if ($filePathRelative3) {
+                                        $output .= '<div class="img-wrapper">';
+                                        $output .= '<span class="invoice-number">'.$pack->caja.'</span>';
+                                        $output .= '<a href="https://mwt.one' . $filePathRelative3 . '" target="_blank">';
+                                        $output .= '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">';
+                                        $output .= '</a>';
+                                        $output .= '</div>';
+                                    }
+                                    $output .= '<div class="button-container">';
+                                    $output .= '<button type="submit" name="delete_pack_detallado" class="btn btn-danger" value="' . $pack->caja . '">';
+                                    $output .= '<i class="fas fa-times"></i>';
+                                    $output .= '</button>';
+                                    $output .= '</div>';
+                                    $output .= '</div>'; 
+                                }
+                                
+                            } 
+                               
+                $output .= '</div>';
+                if (!empty($packs)){
+                    $output .= '<br>'; 
+                }
                 $output .= '<div>';
                 $output .= '<br>';
                 $output .= '<label for="address_selection">Dirección de Envío</label>';
@@ -1056,22 +1120,31 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $output .= '<input type="text" id="valorEnvio" name="valorEnvio" value="' . htmlspecialchars($datos['order_shipping_price']) . '"readonly>';
                 $output .= '</div>';
                 }
-                $output .= '<br>';
                 $output .= '<div class="' . $addon_id . ' container">'; // Inicio del div contenedor
                     if (!empty($envios)){
                         foreach ($envios as $envio) {
                             $filePathRelative4 = $this->getUploadedFiles16($order_number);
-                            $output .= '<div class="' . $addon_id . ' img-container2">' .
-                            '<span class="invoice-number">Envio</span>' .
-                            '<a href="https://mwt.one' . $filePathRelative4 . '" target="_blank">' .
-                            '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">' .
-                            '</a>' .
-                            '</div>';
+                            $output .= '<div class="img-container2">';
+                                    if ($filePathRelative4) {
+                                        $output .= '<div class="img-wrapper">';
+                                        $output .= '<span class="invoice-number">Envio</span>';
+                                        $output .= '<a href="https://mwt.one' . $filePathRelative4 . '" target="_blank">';
+                                        $output .= '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">';
+                                        $output .= '</a>';
+                                        $output .= '</div>';
+                                    }
+                                    $output .= '<div class="button-container">';
+                                    $output .= '<button type="submit" name="delete_cotizacion" class="btn btn-danger">';
+                                    $output .= '<i class="fas fa-times"></i>';
+                                    $output .= '</button>';
+                                    $output .= '</div>';
+                                    $output .= '</div>';     
                         }
                     }
                 $output .= '</div>';
             } 
             $output .= '</div>' ;
+            $output .= '<br>';
             $output .= '<div class="button-group">';
             $output .= '<br>';
             $output .= '<input type="submit" name="preparacion_form" class="btn btn-warning" value="Guardar">';
@@ -1084,26 +1157,26 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $output .= '</section>';
             $output .= '<script>';
             $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-            $output .= '    var img1 = document.querySelector(".img1");';
-            $output .= '    var img2 = document.querySelector(".img2");';
-            $output .= '    var img3 = document.querySelector(".img3");';
+            $output .= '    var tab1 = document.querySelector(".tab.blue-tab#tab1");';
+            $output .= '    var tab2 = document.querySelector(".tab.green-tab#tab2");';
+            $output .= '    var tab3 = document.querySelector(".tab.purple-tab#tab3");';
             $output .= '    var section1 = document.getElementById("section1");';
             $output .= '    var section2 = document.getElementById("section2");';
             $output .= '    var section3 = document.getElementById("section3");';
             $output .= '    ';
-            $output .= '    img1.addEventListener("click", function() {';
+            $output .= '    tab1.addEventListener("click", function() {';
             $output .= '        section1.style.display = "block";';
             $output .= '        section2.style.display = "none";';
             $output .= '        section3.style.display = "none";';
             $output .= '    });';
             $output .= '    ';
-            $output .= '    img2.addEventListener("click", function() {';
+            $output .= '    tab2.addEventListener("click", function() {';
             $output .= '        section1.style.display = "none";';
             $output .= '        section2.style.display = "block";';
             $output .= '        section3.style.display = "none";';
             $output .= '    });';
             $output .= '    ';
-            $output .= '    img3.addEventListener("click", function() {';
+            $output .= '    tab3.addEventListener("click", function() {';
             $output .= '        section1.style.display = "none";';
             $output .= '        section2.style.display = "none";';
             $output .= '        section3.style.display = "block";';
@@ -1129,10 +1202,15 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $number_invoice = $this->getUploadedFiles7($order_number);
                 $number_invoice2 = $number_invoice[0]->number_invoice;
                 $output .= '<div style="display: flex; justify-content: space-around;">';
-                $output .= '<div class="img-container"><img id="img1" class="img img1" src="https://mwt.one/images/estatus/carpeta-azul.png" alt="Imagen de estatus" title="Creacion/Credito"><p class="status-text">Creacion/Credito</p>';
+                $output .= '<div class="tab blue-tab" id="tab1" style="text-align: center;">';
+                $output .= '<span>Creacion/Credito</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img2" class="img img2 " src="https://mwt.one/images/estatus/carpeta-morada.png" alt="Imagen de estatus" title="Producción"><p class="status-text ">Producción</p>';
+                $output .= '</div>';
+                $output .= '<div class="tab green-tab" id="tab2" style="text-align: center;">';
+                $output .= '<span>Producción</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if (!empty($number) && !empty($fecha)) {
                     // Si ambos tienen datos, mostrar la imagen verde
                     $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
@@ -1144,7 +1222,10 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
                 }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img3" class="img img3 " src="https://mwt.one/images/estatus/carrpeta-naranja.png" alt="Imagen de estatus4" title="Preparación"><p class="status-text ">Preparación</p>';
+                $output .= '</div>';
+                $output .= '<div class="tab purple-tab" id="tab3"  style="text-align: center;">';
+                $output .= '<span>Preparación</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if (!empty($packs) && !empty($envios)) {
                     // Si ambos tienen datos, mostrar la imagen verde
                     $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
@@ -1156,7 +1237,10 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
                 }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img4" class="img img4 " src="https://mwt.one/images/estatus/carrpeta-negra.png" alt="Imagen de estatus5" title="Despacho"><p class="status-text ">Despacho</p>';
+                $output .= '</div>';
+                $output .= '<div class="tab pink-tab" id="tab4">';
+                $output .= '<span>Despacho</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if (!empty($despacho) && !empty($number_invoice2)) {
                     // Si ambos tienen datos, mostrar la imagen verde
                     $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
@@ -1168,45 +1252,43 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
                 }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img5" class="img img5 " src="https://mwt.one/images/estatus/carpeta-purrpura.png" alt="Imagen de estatus6" title="Transito"><p class="status-text ">Transito</p></div>';
-                $output .= '<div class="img-container"><img id="img6" class="img img6 " src="https://mwt.one/images/estatus/carpeta-amarilla.png" alt="Imagen de estatus6" title="Status/Pago"><p class="status-text ">Status/Pago</p></div>';
+                $output .= '</div>';
+                $output .= '<div class="tab orange-tab" id="tab5">Transito</div>';
+                $output .= '<div class="tab yellow-tab" id="tab6">Status/Pago</div>';
                 $output .= '</div>';
                 $output .= '<script>';
-                
                 $output .= 'let currentImage = null;';
-                
-                $output .= 'const addActiveClass = (image) => {';
+                $output .= 'const addActiveClass = (tab) => {';
                     $output .= '  if (currentImage) {';
                     $output .= '    currentImage.classList.remove("active3");';
                     $output .= '  }';
-                    $output .= '  image.classList.add("active3");';
-                    $output .= '  currentImage = image;';
+                    $output .= '  tab.classList.add("active3");';
+                    $output .= '  currentImage = tab;';
                     $output .= '};';
-                    
-                    $output .= 'document.getElementById("img1").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab1").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
                     
-                    $output .= 'document.getElementById("img2").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab2").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
                     
-                    $output .= 'document.getElementById("img3").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab3").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
                     
-                    $output .= 'document.getElementById("img4").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab4").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
                     
                     // Set the active3 class for the fourth image when the page is loaded
                     $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-                    $output .= '  const img4 = document.getElementById("img4");';
-                    $output .= '  addActiveClass(img4);';
+                    $output .= '  const tab4 = document.getElementById("tab4");';
+                    $output .= '  addActiveClass(tab4);';
                     $output .= '});';
                     
                     $output .= '</script>';
-            $output .= '<section id="section1" style="display:none;">';
+            $output .= '<section id="section1" class="tab-content-1" style="display:none;">';
             $output .= '<div>';
             $output .= '<br>';
             $output .= '<label for="number_pedido">Número de Pedido</label>';
@@ -1259,7 +1341,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $output .= '<input type="text" id="tyme_credit" name="tyme_credit" value="' . htmlspecialchars($orderFullPrice) . '" readonly>';
             $output .= '</div>';
             $output .= '</section>';
-            $output .= '<section id="section2" style="display:none;">';
+            $output .= '<section id="section2" class="tab-content2-1" style="display:none;">';
             $output .= '<div>';
             $output .= '<br>';
             $number = $this->getsap($order_number);
@@ -1293,7 +1375,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $output .= '<input type="date" id="fechaf" name="fechaf" value="'.htmlspecialchars($fecha['fechaf']).'" readonly>';
             $output .= '</div>' ;
             $output .= '</section>';
-            $output .= '<section id="section3" style="display:none;">';
+            $output .= '<section id="section3" class="tab-content3-1" style="display:none;">';
             $datos = $this->getmethodoshipping($order_number);
             $output .= '<div>';
             $output .= '<br>';
@@ -1375,14 +1457,37 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     }
                 $output .= '</div>';
             $output .= '</section>';
-            $output .= '<section id="section4" style="display:none;">';
+            $guias = $this->getUploadedFiles5($order_number);
+            $number_invoice = $this->getUploadedFiles7($order_number);
+            $filePathRelatives2 = $this->getUploadedFiles9($order_number);
+            if (!empty($guias) && !empty($guias->number_guia)) {
+                $filePathRelative3 = $this->getUploadedFiles6($order_number, $guias->number_guia);
+            }
+            if (!empty($filePathRelatives2) && !empty($filePathRelatives2->certificado)) {
+                $certificadoPath = $filePathRelatives2->certificado;
+            }
+            if (!empty($guias)) {
+                $sectionClass = 'tab-content4-1';
+            } else {
+                $sectionClass = 'tab-content4';
+            }
+            if (!empty($guias) && !empty($number_invoice[0]->invoice) && !empty($number_invoice[0]->certificado)) {
+                $sectionClass = 'tab-content4-2';
+            } elseif (!empty($number_invoice[0]->invoice) && !empty($guias)) {
+                $sectionClass = 'tab-content4-3';
+            } elseif (!empty($number_invoice[0]->certificado) && !empty($guias)) {
+                $sectionClass = 'tab-content4-4';
+            } elseif (!empty($number_invoice[0]->invoice) && !empty($number_invoice[0]->certificado)){
+                $sectionClass = 'tab-content4-5';
+            }
+            $output .= '<section id="section4" class="' . $sectionClass . '">';
+            
             $methodo = $this->getShipping($order_number);
             if ($operator['operator'] == 'Fabrica'){
              if ($methodo == 'Aereo') {
                 if ($titulo == 'Administrator'){
                     $despacho = $this->getdespacho($order_number);
                     if (empty($despacho['nomber'])) {
-                        // Si $despacho['nomber'] está vacío, muestra el input de texto
                         $output .= '<div>';
                         $output .= '<br>';
                         $output .= '<label for="nomber">Nombre Aerolínea</label>';
@@ -1391,7 +1496,6 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         $output .= '<span id="nomber_error" style="color: red;"></span>';
                         $output .= '</div>';
                     } else {
-                        // Si $despacho['nomber'] no está vacío, muestra su valor
                         $output .= '<div style="display: flex; justify-content: center; align-items: center;">';
                         $output .= '<div>';
                         $output .= '<label for="nomber">Aerolínea</label>';
@@ -1531,7 +1635,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="fechas">Fecha de Embarque</label>';
-                    $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '">';
+                    $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '"style="width: 480px; margin: 0 auto; text-align: center;">';
                     $output .= '</div>';
                     $guias = $this->getUploadedFiles5($order_number);
                     if (empty($guias)) {
@@ -1543,30 +1647,6 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         $output .= '</div>';
                     } 
                     
-                    /*
-                    $output .= '<div id="guias">';
-                    $output .= '</div>';
-                    $output .= '<br>';
-                    $output .= '<button type="button" id="agregar_guia">Agregar Guias</button>';
-                    $output .= '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>';
-                    $output .= '<script>';
-                    $output .= '$(document).ready(function() {';
-                    $output .= '    $("#agregar_guia").on("click", function() {';
-                    $output .= '        var nuevoCampo = \'<div>\';';
-                    $output .= '        nuevoCampo += \'<br>\';';
-                    $output .= '        nuevoCampo += \'<label for="document_upload">Subir Guía Aerolínea Adiccional: </label>\';';
-                    $output .= '        nuevoCampo += \'<input type="file" class="document_upload" name="document_upload_nuevo[]">\';';
-                    $output .= '        nuevoCampo += \'</div>\';';
-                    $output .= '        nuevoCampo += \'<button type="button" class="eliminar_guia">X</button>\';';
-                    $output .= '        $("#guias").append(nuevoCampo);';
-                    $output .= '    });';
-                    $output .= '    $("body").on("click", ".eliminar_guia", function() {';
-                    $output .= '        $(this).parent().remove();';
-                    $output .= '    });';                                
-                    $output .= '});';
-                    $output .= '</script>';
-                    //fin
-                    */
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="tyme_credit">Valor del Pedido</label>';
@@ -1586,8 +1666,8 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                      $output .= '</div>';
                      $output .= '<script>';
                      $output .= 'function validateInvoiceNumber(input) {';
-                     $output .= '    var pattern = /^[0-9a-zA-Z-]+$/;'; // Modificada la expresión regular
-                     $output .= '    var errorMessage = "Solo se permiten números y el guion \'-\'.";'; // Actualizado el mensaje de error
+                     $output .= '    var pattern = /^[0-9a-zA-Z-]+$/;'; 
+                     $output .= '    var errorMessage = "Solo se permiten números y el guion \'-\'.";'; 
                      $output .= '    var errorElement = document.getElementById("number_invoice_error");';
                      $output .= '    if (!pattern.test(input.value)) {';
                      $output .= '        errorElement.textContent = errorMessage;';
@@ -1605,16 +1685,16 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="nueva_fecha">Fecha de Pago</label>';
-                    $output .= '<input type="date" id="nueva_fecha" name="nueva_fecha" value="' . htmlspecialchars($newDate) . '" readonly>';
+                    $output .= '<input type="date" id="nueva_fecha" name="nueva_fecha" value="' . htmlspecialchars($newDate) . '"style="width: 480px; margin: 0 auto; text-align: center;" readonly>';
                     $output .= '</div>';
                     $output .= '<script>';
-                    $output .= 'document.addEventListener("DOMContentLoaded", calcularFechaPago);'; // Calcular al cargar la página
+                    $output .= 'document.addEventListener("DOMContentLoaded", calcularFechaPago);';
                     $output .= 'document.getElementById("fechas").addEventListener("change", calcularFechaPago);';
                     $output .= 'function calcularFechaPago() {';
                     $output .= '    var fechaEmbarque = document.getElementById("fechas").value;';
                     $output .= '    var daysToAdd = ' . intval($customerPaymentTime) . ';';
                     $output .= '    var timestampFechaArribo = Date.parse(fechaEmbarque);';
-                    $output .= '    var newTimestamp = timestampFechaArribo + daysToAdd * 24 * 60 * 60 * 1000;'; // Convirtiendo días a milisegundos
+                    $output .= '    var newTimestamp = timestampFechaArribo + daysToAdd * 24 * 60 * 60 * 1000;';
                     $output .= '    var newDate = new Date(newTimestamp).toISOString().split("T")[0];';
                     $output .= '    document.getElementById("nueva_fecha").value = newDate;';
                     $output .= '}';
@@ -1623,6 +1703,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="document_upload2">Subir Factura</label>';
+                    $output .= '<br>';
                     $output .= '<input type="file" id="document_upload2" name="document_upload2" accept=".pdf">';
                     $output .= '<p>Solo se permiten archivos .pdf</p>';
                     $output .= '</div>';
@@ -1632,11 +1713,12 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         $output .= '<div>';
                         $output .= '<br>';
                         $output .= '<label for="document_upload3">Subir Certificado Origen</label>';
+                        $output .= '<br>';
                         $output .= '<input type="file" id="document_upload3" name="document_upload3" accept=".pdf">';
                         $output .= '<p>Solo se permiten archivos .pdf</p>';
                         $output .= '</div>';
                     }                    
-                    $output .= '<div class="' . $addon_id . ' container">'; // Inicio del div contenedor
+                    $output .= '<div class="' . $addon_id . ' container">'; 
                     if (!empty($number_invoice[0]->invoice)){
                         $output .= '<br>';
                         foreach ($number_invoice as $invoice) {
@@ -1646,7 +1728,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                             $output .= '<div class="' . $addon_id . ' img-container2">' .
                                 '<span class="invoice-number">Factura</span>' .
                                 '<a href="https://mwt.one' . $invoicePath . '" target="_blank">' .
-                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de factura">' .
+                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de factura" width="180" height="180">' .
                                 '</a>' .
                                 '<div class="button-group">' . 
                                     '<button type="submit" name="delete_invoice" class="btn btn-danger">' .
@@ -1665,7 +1747,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                             $output .= '<div class="' . $addon_id . ' img-container2">' .
                                 '<span class="invoice-number">Certificado</span>' .
                                 '<a href="https://mwt.one' . $certificadoPath . '" target="_blank">' .
-                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de certificado">' .
+                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de certificado" width="180" height="180">' .
                                 '</a>' .
                                 '<div class="button-group">' . 
                                     '<button type="submit" name="delete_certificado" class="btn btn-danger">' .
@@ -1685,7 +1767,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                             $output .= '<div class="' . $addon_id . ' img-container2">' .
                                 '<span class="invoice-number">Guia</span>' .
                                 '<a href="https://mwt.one' . $filePathRelative3 . '" target="_blank">' .
-                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">' .
+                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia" width="180" height="180">' .
                                 '</a>' .
                                 '<div class="button-group">' . 
                                     '<button type="submit" name="delete_guia" class="btn btn-danger">' .
@@ -1696,7 +1778,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         }
                     }
                     }
-                    $output .= '</div>'; // Fin del div contenedor
+                    $output .= '</div>'; 
                     //fin de proceso
                     $output .= '<div class="button-group">';
                     $output .= '<br>';
@@ -1709,10 +1791,12 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '</div>';
                     }else{
                         $despacho = $this->getdespacho($order_number);
+                        $output .= '<div style="display: flex; justify-content: center; align-items: center;">';
                         $output .= '<div>';
+                        $output .= '<label for="nomber">Aerolínea</label>';
                         $output .= '<br>';
-                        $output .= '<label for="nomber">Nombre Aerolínea</label>';
-                        $output .= '<input type="text" id="nomber" name="nomber" value="' . htmlspecialchars($despacho['nomber']) . '" readonly title="La Modificacion de este campo la realiza el administrador">';
+                        $output .= $despacho['nomber'];
+                        $output .= '</div>';
                         $output .= '</div>';
                         $output .= '<div>';
                         $output .= '<br>';
@@ -1732,7 +1816,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         $output .= '<div>';
                         $output .= '<br>';
                         $output .= '<label for="fechas">Fecha de Embarque</label>';
-                        $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '"readonly title="La Modificacion de este campo la realiza el administrador">';
+                        $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '"style="width: 480px; margin: 0 auto; text-align: center;" readonly title="La Modificacion de este campo la realiza el administrador">';
                         $output .= '</div>';
                         $output .= '<div>';
                         $output .= '<br>';
@@ -1755,9 +1839,9 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         $output .= '<div>';
                         $output .= '<br>';
                         $output .= '<label for="nueva_fecha">Fecha de Pago</label>';
-                        $output .= '<input type="date" id="nueva_fecha" name="nueva_fecha" value="' . htmlspecialchars($newDate) . '" readonly title="La Modificacion de este campo la realiza el administrador">';
+                        $output .= '<input type="date" id="nueva_fecha" name="nueva_fecha" value="' . htmlspecialchars($newDate) . '"style="width: 480px; margin: 0 auto; text-align: center;" readonly title="La Modificacion de este campo la realiza el administrador">';
                         $output .= '</div>';
-                        $output .= '<div class="' . $addon_id . ' container">'; // Inicio del div contenedor
+                        $output .= '<div class="' . $addon_id . ' container">'; 
                         if (!empty($number_invoice[0]->invoice)){
                             $output .= '<br>';
                             foreach ($number_invoice as $invoice) {
@@ -1767,7 +1851,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                                 $output .= '<div class="' . $addon_id . ' img-container2">' .
                                     '<span class="invoice-number">Factura</span>' .
                                     '<a href="https://mwt.one' . $invoicePath . '" target="_blank">' .
-                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de factura">' .
+                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de factura"  width="180" height="180">' .
                                     '</a>' .
                                 '</div>';
                                 }
@@ -1781,7 +1865,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                                 $output .= '<div class="' . $addon_id . ' img-container2">' .
                                     '<span class="invoice-number">Certificado</span>' .
                                     '<a href="https://mwt.one' . $certificadoPath . '" target="_blank">' .
-                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de certificado">' .
+                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de certificado"  width="180" height="180">' .
                                     '</a>' .
                                 '</div>';
                             }
@@ -1796,7 +1880,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                                 $output .= '<div class="' . $addon_id . ' img-container2">' .
                                     '<span class="invoice-number">Guia</span>' .
                                     '<a href="https://mwt.one' . $filePathRelative3 . '" target="_blank">' .
-                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">' .
+                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia"  width="180" height="180">' .
                                     '</a>' .
                                 '</div>';
                             }
@@ -1951,7 +2035,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="fechas">Fecha de Embarque</label>';
-                    $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '">';
+                    $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '"style="width: 480px; margin: 0 auto; text-align: center;">';
                     $output .= '</div>';
                     $guias = $this->getUploadedFiles5($order_number);
                     if (empty($guias)) {
@@ -1962,31 +2046,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                                 $output .= '<p>Solo se permiten archivos .pdf</p>';
                                 $output .= '</div>';
                     } 
-                    //funcion para agregar mas guias
-                    /*
-                    $output .= '<div id="guias">';
-                    $output .= '</div>';
-                    $output .= '<br>';
-                    $output .= '<button type="button" id="agregar_guia">Agregar Guias</button>';
-                    $output .= '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>';
-                    $output .= '<script>';
-                    $output .= '$(document).ready(function() {';
-                    $output .= '    $("#agregar_guia").on("click", function() {';
-                    $output .= '        var nuevoCampo = \'<div>\';';
-                    $output .= '        nuevoCampo += \'<br>\';';
-                    $output .= '        nuevoCampo += \'<label for="document_upload">Subir Guía Naviera Adiccional: </label>\';';
-                    $output .= '        nuevoCampo += \'<input type="file" class="document_upload" name="document_upload_nuevo[]">\';';
-                    $output .= '        nuevoCampo += \'</div>\';';
-                    $output .= '        nuevoCampo += \'<button type="button" class="eliminar_guia">X</button>\';';
-                    $output .= '        $("#guias").append(nuevoCampo);';
-                    $output .= '    });';
-                    $output .= '    $("body").on("click", ".eliminar_guia", function() {';
-                    $output .= '        $(this).parent().remove();';
-                    $output .= '    });';                                
-                    $output .= '});';
-                    $output .= '</script>';
-                    */
-                    //fin
+                   
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="additional_info">Información adicional</label>';
@@ -2030,8 +2090,8 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '</div>';
                     $output .= '<script>';
                     $output .= 'function validateInvoiceNumber(input) {';
-                    $output .= '    var pattern = /^[0-9a-zA-Z-]+$/;'; // Modificada la expresión regular
-                    $output .= '    var errorMessage = "Solo se permiten números y el guion \'-\'.";'; // Actualizado el mensaje de error
+                    $output .= '    var pattern = /^[0-9a-zA-Z-]+$/;'; 
+                    $output .= '    var errorMessage = "Solo se permiten números y el guion \'-\'.";';
                     $output .= '    var errorElement = document.getElementById("number_invoice_error");';
                     $output .= '    if (!pattern.test(input.value)) {';
                     $output .= '        errorElement.textContent = errorMessage;';
@@ -2049,16 +2109,16 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="nueva_fecha">Fecha de Pago</label>';
-                    $output .= '<input type="date" id="nueva_fecha" name="nueva_fecha" value="' . htmlspecialchars($newDate) . '" readonly>';
+                    $output .= '<input type="date" id="nueva_fecha" name="nueva_fecha" value="' . htmlspecialchars($newDate) . '"style="width: 480px; margin: 0 auto; text-align: center;" readonly>';
                     $output .= '</div>';
                     $output .= '<script>';
-                    $output .= 'document.addEventListener("DOMContentLoaded", calcularFechaPago);'; // Calcular al cargar la página
+                    $output .= 'document.addEventListener("DOMContentLoaded", calcularFechaPago);';
                     $output .= 'document.getElementById("fechas").addEventListener("change", calcularFechaPago);';
                     $output .= 'function calcularFechaPago() {';
                     $output .= '    var fechaEmbarque = document.getElementById("fechas").value;';
                     $output .= '    var daysToAdd = ' . intval($customerPaymentTime) . ';';
                     $output .= '    var timestampFechaArribo = Date.parse(fechaEmbarque);';
-                    $output .= '    var newTimestamp = timestampFechaArribo + daysToAdd * 24 * 60 * 60 * 1000;'; // Convirtiendo días a milisegundos
+                    $output .= '    var newTimestamp = timestampFechaArribo + daysToAdd * 24 * 60 * 60 * 1000;'; 
                     $output .= '    var newDate = new Date(newTimestamp).toISOString().split("T")[0];';
                     $output .= '    document.getElementById("nueva_fecha").value = newDate;';
                     $output .= '}';
@@ -2091,7 +2151,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                             $output .= '<div class="' . $addon_id . ' img-container2">' .
                                 '<span class="invoice-number">Factura</span>' .
                                 '<a href="https://mwt.one' . $invoicePath . '" target="_blank">' .
-                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de factura">' .
+                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de factura"  width="180" height="180">' .
                                 '</a>' .
                                 '<div class="button-group">' . 
                                     '<button type="submit" name="delete_invoice" class="btn btn-danger">' .
@@ -2110,7 +2170,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                             $output .= '<div class="' . $addon_id . ' img-container2">' .
                                 '<span class="invoice-number">Certificado</span>' .
                                 '<a href="https://mwt.one' . $certificadoPath . '" target="_blank">' .
-                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de certificado">' .
+                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de certificado"  width="180" height="180">' .
                                 '</a>' .
                                 '<div class="button-group">' . 
                                     '<button type="submit" name="delete_certificado" class="btn btn-danger">' .
@@ -2130,7 +2190,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                             $output .= '<div class="' . $addon_id . ' img-container2">' .
                                 '<span class="invoice-number">Guia</span>' .
                                 '<a href="https://mwt.one' . $filePathRelative3 . '" target="_blank">' .
-                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">' .
+                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia"  width="180" height="180">' .
                                 '</a>' .
                                 '<div class="button-group">' . 
                                     '<button type="submit" name="delete_guia" class="btn btn-danger">' .
@@ -2182,7 +2242,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="fechas">Fecha de Embarque</label>';
-                    $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '"readonly title="La Modificacion de este campo la realiza el administrador">';
+                    $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '"style="width: 480px; margin: 0 auto; text-align: center;" readonly title="La Modificacion de este campo la realiza el administrador">';
                     $output .= '</div>';
                     $output .= '<div>';
                     $output .= '<br>';
@@ -2205,7 +2265,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="nueva_fecha">Fecha de Pago</label>';
-                    $output .= '<input type="date" id="nueva_fecha" name="nueva_fecha" value="' . htmlspecialchars($newDate) . '" readonly title="La Modificacion de este campo la realiza el administrador">';
+                    $output .= '<input type="date" id="nueva_fecha" name="nueva_fecha" value="' . htmlspecialchars($newDate) . '"style="width: 480px; margin: 0 auto; text-align: center;" readonly title="La Modificacion de este campo la realiza el administrador">';
                     $output .= '</div>';
                     $output .= '<div class="' . $addon_id . ' container">'; // Inicio del div contenedor
                         if (!empty($number_invoice[0]->invoice)){
@@ -2217,7 +2277,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                                 $output .= '<div class="' . $addon_id . ' img-container2">' .
                                     '<span class="invoice-number">Factura</span>' .
                                     '<a href="https://mwt.one' . $invoicePath . '" target="_blank">' .
-                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de factura">' .
+                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de factura"  width="180" height="180">' .
                                     '</a>' .
                                 '</div>';
                                 }
@@ -2232,7 +2292,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                                 $output .= '<div class="' . $addon_id . ' img-container2">' .
                                     '<span class="invoice-number">Certificado</span>' .
                                     '<a href="https://mwt.one' . $certificadoPath . '" target="_blank">' .
-                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de certificado">' .
+                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de certificado"  width="180" height="180">' .
                                     '</a>' .
                                 '</div>';
                             }
@@ -2247,7 +2307,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                                 $output .= '<div class="' . $addon_id . ' img-container2">' .
                                     '<span class="invoice-number">Guia</span>' .
                                     '<a href="https://mwt.one' . $filePathRelative3 . '" target="_blank">' .
-                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">' .
+                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia"  width="180" height="180">' .
                                     '</a>' .
                                 '</div>';
                             }
@@ -2260,37 +2320,37 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $output .= '</section>';
                         $output .= '<script>';
                         $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-                        $output .= '    var img1 = document.querySelector(".img1");';
-                        $output .= '    var img2 = document.querySelector(".img2");';
-                        $output .= '    var img3 = document.querySelector(".img3");';
-                        $output .= '    var img4 = document.querySelector(".img4");';
+                        $output .= '    var tab1 = document.querySelector(".tab.blue-tab#tab1");';
+                        $output .= '    var tab2 = document.querySelector(".tab.green-tab#tab2");';
+                        $output .= '    var tab3 = document.querySelector(".tab.purple-tab#tab3");';
+                        $output .= '    var tab4 = document.querySelector(".tab.pink-tab#tab4");';
                         $output .= '    var section1 = document.getElementById("section1");';
                         $output .= '    var section2 = document.getElementById("section2");';
                         $output .= '    var section3 = document.getElementById("section3");';
                         $output .= '    var section4 = document.getElementById("section4");';
                         $output .= '    ';
-                        $output .= '    img1.addEventListener("click", function() {';
+                        $output .= '    tab1.addEventListener("click", function() {';
                         $output .= '        section1.style.display = "block";';
                         $output .= '        section2.style.display = "none";';
                         $output .= '        section3.style.display = "none";';
                         $output .= '        section4.style.display = "none";';
                         $output .= '    });';
                         $output .= '    ';
-                        $output .= '    img2.addEventListener("click", function() {';
+                        $output .= '    tab2.addEventListener("click", function() {';
                         $output .= '        section1.style.display = "none";';
                         $output .= '        section2.style.display = "block";';
                         $output .= '        section3.style.display = "none";';
                         $output .= '        section4.style.display = "none";';
                         $output .= '    });';
                         $output .= '    ';
-                        $output .= '    img3.addEventListener("click", function() {';
+                        $output .= '    tab3.addEventListener("click", function() {';
                         $output .= '        section1.style.display = "none";';
                         $output .= '        section2.style.display = "none";';
                         $output .= '        section3.style.display = "block";';
                         $output .= '        section4.style.display = "none";';
                         $output .= '    });';
                         $output .= '    ';
-                        $output .= '    img4.addEventListener("click", function() {';
+                        $output .= '    tab4.addEventListener("click", function() {';
                         $output .= '        section1.style.display = "none";';
                         $output .= '        section2.style.display = "none";';
                         $output .= '        section3.style.display = "none";';
@@ -2318,10 +2378,15 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $number_invoice2 = $number_invoice[0]->number_invoice;
                 $packs2 = $this->getUploadedFiles3($order_number);
                 $output .= '<div style="display: flex; justify-content: space-around;">';
-                $output .= '<div class="img-container"><img id="img1" class="img img1" src="https://mwt.one/images/estatus/carpeta-azul.png" alt="Imagen de estatus" title="Creacion/Credito"><p class="status-text">Creacion/Credito</p>';
+                $output .= '<div class="tab blue-tab" id="tab1" style="text-align: center;">';
+                $output .= '<span>Creacion/Credito</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img2" class="img img2 " src="https://mwt.one/images/estatus/carpeta-morada.png" alt="Imagen de estatus" title="Producción"><p class="status-text ">Producción</p>';
+                $output .= '</div>';
+                $output .= '<div class="tab green-tab" id="tab2" style="text-align: center;">';
+                $output .= '<span>Producción</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if (!empty($number) && !empty($fecha)) {
                     // Si ambos tienen datos, mostrar la imagen verde
                     $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
@@ -2333,7 +2398,10 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
                 }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img3" class="img img3 " src="https://mwt.one/images/estatus/carrpeta-naranja.png" alt="Imagen de estatus4" title="Preparación"><p class="status-text ">Preparación</p>';
+                $output .= '</div>';
+                $output .= '<div class="tab purple-tab" id="tab3"  style="text-align: center;">';
+                $output .= '<span>Preparación</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if (!empty($packs) && !empty($envios)) {
                     // Si ambos tienen datos, mostrar la imagen verde
                     $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
@@ -2345,7 +2413,10 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
                 }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img4" class="img img4 " src="https://mwt.one/images/estatus/carrpeta-negra.png" alt="Imagen de estatus5" title="Despacho"><p class="status-text ">Despacho</p>';
+                $output .= '</div>';
+                $output .= '<div class="tab pink-tab" id="tab4">';
+                $output .= '<span>Despacho</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if (!empty($despacho) && !empty($number_invoice2)) {
                     // Si ambos tienen datos, mostrar la imagen verde
                     $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
@@ -2357,50 +2428,59 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
                 }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img5" class="img img5 " src="https://mwt.one/images/estatus/carpeta-purrpura.png" alt="Imagen de estatus6" title="Transito"><p class="status-text ">Transito</p>';
-                if (!empty($despacho['fecha_arribo']) && !empty($despacho['puerto_intermedio']) && !empty($packs2)) {
-                    // Si ambos tienen datos, mostrar la imagen verde
-                    $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
-                } elseif (empty($despacho['fecha_arribo']) && empty($despacho['puerto_intermedio']) && empty($packs2)) {
-                    // Si ambos están vacíos, mostrar la imagen roja
-                    $output .= '<img src="https://mwt.one/images/estatus/rojo.png" alt="Rojo" title="Sin Información" style="width: 20px; height: 20px;">';
-                } else {
-                    // Si al menos uno de ellos tiene datos, mostrar la imagen amarilla
-                    $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
-                }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img6" class="img img6 " src="https://mwt.one/images/estatus/carpeta-amarilla.png" alt="Imagen de estatus6" title="Status/Pago"><p class="status-text ">Status/Pago</p></div>';
+                $output .= '<div class="tab orange-tab" id="tab5">';
+                $output .= '<span>Transito</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
+                if (empty($despacho['fecha_arribo']) && empty($despacho['puerto_intermedio']) && empty($packs2)) {
+                    // Si todos están vacíos, mostrar la imagen roja
+                    $output .= '<img src="https://mwt.one/images/estatus/rojo.png" alt="Rojo" title="Sin Información" style="width: 20px; height: 20px;">';
+                } elseif (!empty($despacho['fecha_arribo']) && !empty($despacho['puerto_intermedio']) && !empty($packs2)) {
+                    // Si al menos uno tiene datos, mostrar la imagen amarilla
+                    $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
+                } elseif (!empty($despacho['fecha_arribo']) || !empty($despacho['puerto_intermedio']) || !empty($packs2)) {
+                    // Si todos tienen datos, mostrar la imagen verde
+                    $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
+                    
+                }
+                
+                             
+                       
+                $output .= '</div>';
+                $output .= '</div>';
+                $output .= '<div class="tab yellow-tab" id="tab6">Status/Pago</div>';
                 $output .= '</div>';
                 $output .= '<script>';
                 $output .= 'let currentImage = null;';
-                $output .= 'const addActiveClass = (image) => {';
+                $output .= 'const addActiveClass = (tab) => {';
                     $output .= '  if (currentImage) {';
                     $output .= '    currentImage.classList.remove("active3");';
                     $output .= '  }';
-                    $output .= '  image.classList.add("active3");';
-                    $output .= '  currentImage = image;';
+                    $output .= '  tab.classList.add("active3");';
+                    $output .= '  currentImage = tab;';
                     $output .= '};';
-                    $output .= 'document.getElementById("img1").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab1").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    $output .= 'document.getElementById("img2").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab2").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    $output .= 'document.getElementById("img3").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab3").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    $output .= 'document.getElementById("img4").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab4").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    $output .= 'document.getElementById("img5").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab5").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
                     $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-                    $output .= '  const img5 = document.getElementById("img5");';
-                    $output .= '  addActiveClass(img5);';
+                    $output .= '  const tab5 = document.getElementById("tab5");';
+                    $output .= '  addActiveClass(tab5);';
                     $output .= '});';
                     $output .= '</script>';
-            $output .= '<section id="section1" style="display:none;">';
+                
+            $output .= '<section id="section1" class="tab-content-1" style="display:none;">';
             $fecha = $this->getfechapro($order_number);
             $output .= '<div>';
             $output .= '<br>';
@@ -2453,7 +2533,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $output .= '<input type="text" id="tyme_credit" name="tyme_credit" value="' . htmlspecialchars($orderFullPrice) . '" readonly>';
             $output .= '</div>';
             $output .= '</section>';
-            $output .= '<section id="section2" style="display:none;">';
+            $output .= '<section id="section2" class="tab-content2-1" style="display:none;">';
             $output .= '<div>';
             $output .= '<br>';
             $number = $this->getsap($order_number);
@@ -2487,7 +2567,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $output .= '<input type="date" id="fechaf" name="fechaf" value="'.htmlspecialchars($fecha['fechaf']).'" readonly>';
             $output .= '</div>' ;
             $output .= '</section>';
-            $output .= '<section id="section3" style="display:none;">';
+            $output .= '<section id="section3" class="tab-content3-1" style="display:none;">';
             $datos = $this->getmethodoshipping($order_number);
             $output .= '<div>';
             $output .= '<br>';
@@ -2569,15 +2649,45 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     }
                 $output .= '</div>';
             $output .= '</section>';
-            $output .= '<section id="section4" style="display:none;">';
+            $guias = $this->getUploadedFiles5($order_number);
+            $number_invoice = $this->getUploadedFiles7($order_number);
+            $filePathRelatives2 = $this->getUploadedFiles9($order_number);
+
+            if (!empty($guias) && !empty($guias->number_guia)) {
+                $filePathRelative3 = $this->getUploadedFiles6($order_number, $guias->number_guia);
+            }
+
+            if (!empty($filePathRelatives2) && !empty($filePathRelatives2->certificado)) {
+                $certificadoPath = $filePathRelatives2->certificado;
+            }
+
+            if (!empty($guias)) {
+                $sectionClass = 'tab-content4-1-1';
+            } else {
+                $sectionClass = 'tab-content4';
+            }
+
+            if (!empty($guias) && !empty($number_invoice[0]->invoice) && !empty($number_invoice[0]->certificado)) {
+                $sectionClass = 'tab-content4-2-1';
+            } elseif (!empty($number_invoice[0]->invoice) && !empty($guias)) {
+                $sectionClass = 'tab-content4-3-1';
+            } elseif (!empty($number_invoice[0]->certificado) && !empty($guias)) {
+                $sectionClass = 'tab-content4-4-1';
+            } elseif (!empty($number_invoice[0]->invoice) && !empty($number_invoice[0]->certificado)){
+                $sectionClass = 'tab-content4-5-1';
+            }
+            $output .= '<section id="section4" class="' . $sectionClass . '" style="display:none;">';
+            
             $methodo = $this->getShipping($order_number);
             if ($operator['operator'] == 'Fabrica'){
                 if ($methodo == 'Aereo') {
                     $despacho = $this->getdespacho($order_number);
+                    $output .= '<div style="display: flex; justify-content: center; align-items: center;">';
                     $output .= '<div>';
+                    $output .= '<label for="nomber">Aerolínea</label>';
                     $output .= '<br>';
-                    $output .= '<label for="nomber">Nombre Aerolínea</label>';
-                    $output .= '<input type="text" id="nomber" name="nomber" value="' . htmlspecialchars($despacho['nomber']) . '" readonly>';
+                    $output .= $despacho['nomber'];
+                    $output .= '</div>';
                     $output .= '</div>';
                     $output .= '<div>';
                     $output .= '<br>';
@@ -2597,7 +2707,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="fechas">Fecha de Embarque</label>';
-                    $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '"readonly>';
+                    $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '"style="width: 480px; margin: 0 auto; text-align: center;" readonly>';
                     $output .= '</div>';
                     
                 }elseif($methodo == 'Maritimo'){
@@ -2630,7 +2740,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="fechas">Fecha de Embarque</label>';
-                    $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '"readonly>';
+                    $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '"style="width: 480px; margin: 0 auto; text-align: center;" readonly>';
                     $output .= '</div>';
                     }
                 }
@@ -2655,7 +2765,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $output .= '<div>';
                 $output .= '<br>';
                 $output .= '<label for="nueva_fecha">Fecha de Pago</label>';
-                $output .= '<input type="date" id="nueva_fecha" name="nueva_fecha" value="' . htmlspecialchars($newDate) . '" readonly>';
+                $output .= '<input type="date" id="nueva_fecha" name="nueva_fecha" value="' . htmlspecialchars($newDate) . '"style="width: 480px; margin: 0 auto; text-align: center;" readonly>';
                 $output .= '</div>';
                 $output .= '<div class="' . $addon_id . ' container">'; // Inicio del div contenedor
                 if (!empty($number_invoice[0]->invoice)){
@@ -2667,7 +2777,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         $output .= '<div class="' . $addon_id . ' img-container2">' .
                             '<span class="invoice-number">Factura</span>' .
                             '<a href="https://mwt.one' . $invoicePath . '" target="_blank">' .
-                                '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de factura">' .
+                                '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de factura" width="180" height="180">' .
                             '</a>' .
                         '</div>';
                         }
@@ -2682,7 +2792,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         $output .= '<div class="' . $addon_id . ' img-container2">' .
                             '<span class="invoice-number">Certificado</span>' .
                             '<a href="https://mwt.one' . $certificadoPath . '" target="_blank">' .
-                                '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de certificado">' .
+                                '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de certificado" width="180" height="180">' .
                             '</a>' .
                         '</div>';
                     }
@@ -2697,7 +2807,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         $output .= '<div class="' . $addon_id . ' img-container2">' .
                             '<span class="invoice-number">Guia</span>' .
                             '<a href="https://mwt.one' . $filePathRelative3 . '" target="_blank">' .
-                                '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">' .
+                                '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia" width="180" height="180">' .
                             '</a>' .
                         '</div>';
                     }
@@ -2706,7 +2816,12 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $output .= '</div>';
                 //fin
                 $output .= '</section>';
-                $output .= '<section id="section5" style="display:none;">';
+                $sectionClass2= 'tab-content5';
+                $packs2 = $this->getUploadedFiles3($order_number);
+                if (!empty($packs2)){
+                $sectionClass2 = 'tab-content5-1';
+                }
+                $output .= '<section id="section5" class="' . $sectionClass2 . '">';
                 if ($titulo == 'Administrator'){ 
                     $packs2 = $this->getUploadedFiles3($order_number);
                     if (empty($packs2)){
@@ -3025,7 +3140,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="fechaa">Fecha de Arribo</label>';
-                    $output .= '<input type="date" id="fechaa" name="fechaa" value="' . htmlspecialchars($despacho['fecha_arribo']) . '"min="' . date('Y-m-d') . '"readonly title="La Modificacion de este campo la realiza el administrador">';
+                    $output .= '<input type="text" id="fechaa" name="fechaa" value="' . htmlspecialchars($despacho['fecha_arribo']) . '"min="' . date('Y-m-d') . '"readonly title="La Modificacion de este campo la realiza el administrador">';
                     $output .= '</div>';
                     $packs2 = $this->getUploadedFiles3($order_number);
                     $output .= '<div class="' . $addon_id . ' container">'; // Inicio del div contenedor
@@ -3047,18 +3162,18 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $output .= '</section>';
                 $output .= '<script>';
                 $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-                $output .= '    var img1 = document.querySelector(".img1");';
-                $output .= '    var img2 = document.querySelector(".img2");';
-                $output .= '    var img3 = document.querySelector(".img3");';
-                $output .= '    var img4 = document.querySelector(".img4");';
-                $output .= '    var img5 = document.querySelector(".img5");';
+                $output .= '    var tab1 = document.querySelector(".tab.blue-tab#tab1");';
+                $output .= '    var tab2 = document.querySelector(".tab.green-tab#tab2");';
+                $output .= '    var tab3 = document.querySelector(".tab.purple-tab#tab3");';
+                $output .= '    var tab4 = document.querySelector(".tab.pink-tab#tab4");';
+                $output .= '    var tab5 = document.querySelector(".tab.orange-tab#tab5");';
                 $output .= '    var section1 = document.getElementById("section1");';
                 $output .= '    var section2 = document.getElementById("section2");';
                 $output .= '    var section3 = document.getElementById("section3");';
                 $output .= '    var section4 = document.getElementById("section4");';
                 $output .= '    var section5 = document.getElementById("section5");';
                 $output .= '    ';
-                $output .= '    img1.addEventListener("click", function() {';
+                $output .= '    tab1.addEventListener("click", function() {';
                 $output .= '        section1.style.display = "block";';
                 $output .= '        section2.style.display = "none";';
                 $output .= '        section3.style.display = "none";';
@@ -3066,7 +3181,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $output .= '        section5.style.display = "none";';
                 $output .= '    });';
                 $output .= '    ';
-                $output .= '    img2.addEventListener("click", function() {';
+                $output .= '    tab2.addEventListener("click", function() {';
                 $output .= '        section1.style.display = "none";';
                 $output .= '        section2.style.display = "block";';
                 $output .= '        section3.style.display = "none";';
@@ -3074,7 +3189,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $output .= '        section5.style.display = "none";';
                 $output .= '    });';
                 $output .= '    ';
-                $output .= '    img3.addEventListener("click", function() {';
+                $output .= '    tab3.addEventListener("click", function() {';
                 $output .= '        section1.style.display = "none";';
                 $output .= '        section2.style.display = "none";';
                 $output .= '        section3.style.display = "block";';
@@ -3082,7 +3197,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $output .= '        section5.style.display = "none";';
                 $output .= '    });';
                 $output .= '    ';
-                $output .= '    img4.addEventListener("click", function() {';
+                $output .= '    tab4.addEventListener("click", function() {';
                 $output .= '        section1.style.display = "none";';
                 $output .= '        section2.style.display = "none";';
                 $output .= '        section3.style.display = "none";';
@@ -3090,7 +3205,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $output .= '        section5.style.display = "none";';
                 $output .= '    });';
                 $output .= '    ';
-                $output .= '    img5.addEventListener("click", function() {';
+                $output .= '    tab5.addEventListener("click", function() {';
                 $output .= '        section1.style.display = "none";';
                 $output .= '        section2.style.display = "none";';
                 $output .= '        section3.style.display = "none";';
@@ -3125,10 +3240,15 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $price = $this->getOrder($order_number);
                 $orderFullPrice = $price[0]->order_full_price;
                 $output .= '<div style="display: flex; justify-content: space-around;">';
-                $output .= '<div class="img-container"><img id="img1" class="img img1" src="https://mwt.one/images/estatus/carpeta-azul.png" alt="Imagen de estatus" title="Creacion/Credito"><p class="status-text">Creacion/Credito</p>';
+                $output .= '<div class="tab blue-tab" id="tab1" style="text-align: center;">';
+                $output .= '<span>Creacion/Credito</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img2" class="img img2 " src="https://mwt.one/images/estatus/carpeta-morada.png" alt="Imagen de estatus" title="Producción"><p class="status-text ">Producción</p>';
+                $output .= '</div>';
+                $output .= '<div class="tab green-tab" id="tab2" style="text-align: center;">';
+                $output .= '<span>Producción</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if (!empty($number) && !empty($fecha)) {
                     // Si ambos tienen datos, mostrar la imagen verde
                     $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
@@ -3140,7 +3260,10 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
                 }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img3" class="img img3 " src="https://mwt.one/images/estatus/carrpeta-naranja.png" alt="Imagen de estatus4" title="Preparación"><p class="status-text ">Preparación</p>';
+                $output .= '</div>';
+                $output .= '<div class="tab purple-tab" id="tab3"  style="text-align: center;">';
+                $output .= '<span>Preparación</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if (!empty($packs) && !empty($envios)) {
                     // Si ambos tienen datos, mostrar la imagen verde
                     $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
@@ -3152,7 +3275,10 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
                 }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img4" class="img img4 " src="https://mwt.one/images/estatus/carrpeta-negra.png" alt="Imagen de estatus5" title="Despacho"><p class="status-text ">Despacho</p>';
+                $output .= '</div>';
+                $output .= '<div class="tab pink-tab" id="tab4">';
+                $output .= '<span>Despacho</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if (!empty($despacho) && !empty($number_invoice2)) {
                     // Si ambos tienen datos, mostrar la imagen verde
                     $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
@@ -3164,19 +3290,27 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
                 }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img5" class="img img5 " src="https://mwt.one/images/estatus/carpeta-purrpura.png" alt="Imagen de estatus6" title="Transito"><p class="status-text ">Transito</p>';
-                if (!empty($despacho['fecha_arribo']) && !empty($despacho['puerto_intermedio']) && !empty($packs2)) {
-                    // Si ambos tienen datos, mostrar la imagen verde
-                    $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
-                } elseif (empty($despacho['fecha_arribo']) && empty($despacho['puerto_intermedio']) && empty($packs2)) {
-                    // Si ambos están vacíos, mostrar la imagen roja
-                    $output .= '<img src="https://mwt.one/images/estatus/rojo.png" alt="Rojo" title="Sin Información" style="width: 20px; height: 20px;">';
-                } else {
-                    // Si al menos uno de ellos tiene datos, mostrar la imagen amarilla
-                    $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
-                }
                 $output .= '</div>';
-                $output .= '<div class="img-container"><img id="img6" class="img img6 " src="https://mwt.one/images/estatus/carpeta-amarilla.png" alt="Imagen de estatus6" title="Status/Pago"><p class="status-text ">Status/Pago</p>';
+                $output .= '<div class="tab orange-tab" id="tab5">';
+                $output .= '<span>Transito</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
+                if (empty($despacho['fecha_arribo']) && empty($despacho['puerto_intermedio']) && empty($packs2)) {
+                    // Si todos están vacíos, mostrar la imagen roja
+                    $output .= '<img src="https://mwt.one/images/estatus/rojo.png" alt="Rojo" title="Sin Información" style="width: 20px; height: 20px;">';
+                } elseif (!empty($despacho['fecha_arribo']) && !empty($despacho['puerto_intermedio']) && !empty($packs2)) {
+                    // Si al menos uno tiene datos, mostrar la imagen amarilla
+                    $output .= '<img src="https://mwt.one/images/estatus/verde.png" alt="Verde" title="Completo" style="width: 20px; height: 20px;">';
+                } elseif (!empty($despacho['fecha_arribo']) || !empty($despacho['puerto_intermedio']) || !empty($packs2)) {
+                    // Si todos tienen datos, mostrar la imagen verde
+                    $output .= '<img src="https://mwt.one/images/estatus/amarilloo.png" alt="Amarillo" title="Incompleto" style="width: 30px; height: 20px;">';
+                    
+                }
+                
+                $output .= '</div>';
+                $output .= '</div>';
+                $output .= '<div class="tab yellow-tab" id="tab6">';
+                $output .= '<span>Status/Pago</span><br>';
+                $output .= '<div style="display: inline-block; margin-left: 3px;">';
                 if ($tipo['tipo_pago'] === 'Completo') {
                     if (!empty($tipo['fecha_pago']) && !empty($filePathRelative6)) {
                         // Si todos tienen datos, mostrar la imagen verde
@@ -3212,49 +3346,41 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 }
                 $output .= '</div>';
                 $output .= '</div>';
+                $output .= '</div>';
                 $output .= '<script>';
                 $output .= 'let currentImage = null;';
-                
-                $output .= 'const addActiveClass = (image) => {';
+                $output .= 'const addActiveClass = (tab) => {';
                     $output .= '  if (currentImage) {';
                     $output .= '    currentImage.classList.remove("active3");';
                     $output .= '  }';
-                    $output .= '  image.classList.add("active3");';
-                    $output .= '  currentImage = image;';
+                    $output .= '  tab.classList.add("active3");';
+                    $output .= '  currentImage = tab;';
                     $output .= '};';
-                    
-                    $output .= 'document.getElementById("img1").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab1").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    
-                    $output .= 'document.getElementById("img2").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab2").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    
-                    $output .= 'document.getElementById("img3").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab3").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    
-                    $output .= 'document.getElementById("img4").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab4").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    
-                    $output .= 'document.getElementById("img5").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab5").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    
-                    $output .= 'document.getElementById("img6").addEventListener("click", function() {';
+                    $output .= 'document.getElementById("tab6").addEventListener("click", function() {';
                     $output .= '  addActiveClass(this);';
                     $output .= '});';
-                    
-                    // Set the active3 class for the fourth image when the page is loaded
                     $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-                    $output .= '  const img6 = document.getElementById("img6");';
-                    $output .= '  addActiveClass(img6);';
+                    $output .= '  const tab6 = document.getElementById("tab6");';
+                    $output .= '  addActiveClass(tab6);';
                     $output .= '});';
                     
                     $output .= '</script>';
-                $output .= '<section id="section1" style="display:none;">';
+                $output .= '<section id="section1" class="tab-content-1" style="display:none;">';
                 $fecha = $this->getfechapro($order_number);
                 $output .= '<div>';
                 $output .= '<br>';
@@ -3307,7 +3433,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $output .= '<input type="text" id="tyme_credit" name="tyme_credit" value="' . htmlspecialchars($orderFullPrice) . '" readonly>';
                 $output .= '</div>';
                 $output .= '</section>';
-                $output .= '<section id="section2" style="display:none;">';
+                $output .= '<section id="section2" class="tab-content2-1" style="display:none;">';
                 $output .= '<div>';
                 $output .= '<br>';
                 $number = $this->getsap($order_number);
@@ -3341,7 +3467,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 $output .= '<input type="date" id="fechaf" name="fechaf" value="'.htmlspecialchars($fecha['fechaf']).'" readonly>';
                 $output .= '</div>' ;
                 $output .= '</section>';
-                $output .= '<section id="section3" style="display:none;">';
+                $output .= '<section id="section3" class="tab-content3-1" style="display:none;">';
                 $datos = $this->getmethodoshipping($order_number);
                 $output .= '<div>';
                 $output .= '<br>';
@@ -3423,7 +3549,30 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         }
                     $output .= '</div>';
                 $output .= '</section>';
-                $output .= '<section id="section4" style="display:none;">';
+                $guias = $this->getUploadedFiles5($order_number);
+                $number_invoice = $this->getUploadedFiles7($order_number);
+                $filePathRelatives2 = $this->getUploadedFiles9($order_number);
+
+                if (!empty($guias) && !empty($guias->number_guia)) {
+                    $filePathRelative3 = $this->getUploadedFiles6($order_number, $guias->number_guia);
+                }
+
+                if (!empty($filePathRelatives2) && !empty($filePathRelatives2->certificado)) {
+                    $certificadoPath = $filePathRelatives2->certificado;
+                }
+
+                $sectionClass = 'tab-content4';
+
+                if (!empty($guias) && !empty($number_invoice[0]->invoice) && !empty($number_invoice[0]->certificado)) {
+                    $sectionClass = 'tab-content4-2-1';
+                } elseif (!empty($number_invoice[0]->invoice) && !empty($guias)) {
+                    $sectionClass = 'tab-content4-3-1';
+                } elseif (!empty($number_invoice[0]->certificado) && !empty($guias)) {
+                    $sectionClass = 'tab-content4-4-1';
+                } elseif (!empty($number_invoice[0]->invoice) && !empty($number_invoice[0]->certificado)){
+                    $sectionClass = 'tab-content4-5-1';
+                }
+                $output .= '<section id="section4" class="' . $sectionClass . '" style="display:none;">';
                 $methodo = $this->getShipping($order_number);
                 if ($operator['operator'] == 'Fabrica'){
                     if ($methodo == 'Aereo') {
@@ -3451,7 +3600,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         $output .= '<div>';
                         $output .= '<br>';
                         $output .= '<label for="fechas">Fecha de Embarque</label>';
-                        $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '"readonly>';
+                        $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '" style="width: 480px; margin: 0 auto; text-align: center;" readonly>';
                         $output .= '</div>';
                         
                     }elseif($methodo == 'Maritimo'){
@@ -3484,7 +3633,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                         $output .= '<div>';
                         $output .= '<br>';
                         $output .= '<label for="fechas">Fecha de Embarque</label>';
-                        $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '"readonly>';
+                        $output .= '<input type="date" id="fechas" name="fechas" value="' . htmlspecialchars($despacho['fechas']) . '" style="width: 480px; margin: 0 auto; text-align: center;" readonly>';
                         $output .= '</div>';
                         }
                     }
@@ -3521,7 +3670,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                             $output .= '<div class="' . $addon_id . ' img-container2">' .
                                 '<span class="invoice-number">Factura</span>' .
                                 '<a href="https://mwt.one' . $invoicePath . '" target="_blank">' .
-                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de factura">' .
+                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de factura" width="180" height="180">' .
                                 '</a>' .
                             '</div>';
                             }
@@ -3536,7 +3685,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                             $output .= '<div class="' . $addon_id . ' img-container2">' .
                                 '<span class="invoice-number">Certificado</span>' .
                                 '<a href="https://mwt.one' . $certificadoPath . '" target="_blank">' .
-                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de certificado">' .
+                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de certificado" width="180" height="180">' .
                                 '</a>' .
                             '</div>';
                         }
@@ -3551,7 +3700,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                             $output .= '<div class="' . $addon_id . ' img-container2">' .
                                 '<span class="invoice-number">Guia</span>' .
                                 '<a href="https://mwt.one' . $filePathRelative3 . '" target="_blank">' .
-                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">' .
+                                    '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia" width="180" height="180">' .
                                 '</a>' .
                             '</div>';
                         }
@@ -3560,7 +3709,14 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '</div>';
                     //fin
                     $output .= '</section>';
-                    $output .= '<section id="section5" style="display:none;">';
+                    
+                    //fin
+                    $sectionClass2= 'tab-content5';
+                    $packs2 = $this->getUploadedFiles3($order_number);
+                    if (!empty($packs2)){
+                    $sectionClass2 = 'tab-content5-1';
+                    }
+                    $output .= '<section id="section5" class="' . $sectionClass2 . '" style="display:none;">';
                     $output .= '<div>';
                     $state_parts2 = explode(',', $despacho['puerto_intermedio']);
                     if (!empty($state_parts2)) {
@@ -3580,7 +3736,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '<div>';
                     $output .= '<br>';
                     $output .= '<label for="fechaa">Fecha de Arribo</label>';
-                    $output .= '<input type="date" id="fechaa" name="fechaa" value="' . htmlspecialchars($despacho['fecha_arribo']) . '"readonly>';
+                    $output .= '<input type="text" id="fechaa" name="fechaa" value="' . htmlspecialchars($despacho['fecha_arribo']) . '"readonly>';
                     $output .= '</div>';
                     $packs2 = $this->getUploadedFiles3($order_number);
                     $output .= '<div class="' . $addon_id . ' container">'; // Inicio del div contenedor
@@ -3598,7 +3754,18 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                             }               
                     $output .= '</div>';
                     $output .= '</section>';
-                    $output .= '<section id="section6" style="display:none;">';
+                    $comprobantes = $this->getUploadedFiles13($order_number);
+                    if ($comprobantes === null) {
+                        $num_comprobantes = 0;
+                        $output .= '<section id="section6" class="tab-content6" >';
+                    } else {
+                        $num_comprobantes = count($comprobantes);
+                        if ($num_comprobantes > 1) {
+                            $output .= '<section id="section6" class="tab-content6-1-1" >';
+                        } else {
+                            $output .= '<section id="section6" class="tab-content6-1" >';
+                        }
+                    }
                     $number_invoice = $this->getUploadedFiles7($order_number);
                     $tipo = $this->getpago($order_number);
                     $tipos = $this->getpago2($order_number);
@@ -3915,7 +4082,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                                 $output .= '<div class="' . $addon_id . ' img-container2">' .
                                     '<span class="invoice-number">' . $comprobante->nombre . '</span>' .
                                     '<a href="https://mwt.one' . $filePathRelative5 . '" target="_blank">' .
-                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia">' .
+                                        '<img src="https://mwt.one/images/estatus/documento.png" alt="Icono de Guia" >' .
                                     '</a>' .
                                     '<button type="submit" name="delete_comprobante_parcial" class="btn btn-danger" value="' . $comprobante->nombre . '">X</button>' .
                                 '</div>';
@@ -3943,12 +4110,12 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '</section>';
                     $output .= '<script>';
                     $output .= 'document.addEventListener("DOMContentLoaded", function() {';
-                    $output .= '    var img1 = document.querySelector(".img1");';
-                    $output .= '    var img2 = document.querySelector(".img2");';
-                    $output .= '    var img3 = document.querySelector(".img3");';
-                    $output .= '    var img4 = document.querySelector(".img4");';
-                    $output .= '    var img5 = document.querySelector(".img5");';
-                    $output .= '    var img6 = document.querySelector(".img6");';
+                    $output .= '    var tab1 = document.querySelector(".tab.blue-tab#tab1");';
+                    $output .= '    var tab2 = document.querySelector(".tab.green-tab#tab2");';
+                    $output .= '    var tab3 = document.querySelector(".tab.purple-tab#tab3");';
+                    $output .= '    var tab4 = document.querySelector(".tab.pink-tab#tab4");';
+                    $output .= '    var tab5 = document.querySelector(".tab.orange-tab#tab5");';
+                    $output .= '    var tab6 = document.querySelector(".tab.yellow-tab#tab6");';
                     $output .= '    var section1 = document.getElementById("section1");';
                     $output .= '    var section2 = document.getElementById("section2");';
                     $output .= '    var section3 = document.getElementById("section3");';
@@ -3956,7 +4123,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '    var section5 = document.getElementById("section5");';
                     $output .= '    var section6 = document.getElementById("section6");';
                     $output .= '    ';
-                    $output .= '    img1.addEventListener("click", function() {';
+                    $output .= '    tab1.addEventListener("click", function() {';
                     $output .= '        section1.style.display = "block";';
                     $output .= '        section2.style.display = "none";';
                     $output .= '        section3.style.display = "none";';
@@ -3965,7 +4132,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '        section6.style.display = "none";';
                     $output .= '    });';
                     $output .= '    ';
-                    $output .= '    img2.addEventListener("click", function() {';
+                    $output .= '    tab2.addEventListener("click", function() {';
                     $output .= '        section1.style.display = "none";';
                     $output .= '        section2.style.display = "block";';
                     $output .= '        section3.style.display = "none";';
@@ -3974,7 +4141,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '        section6.style.display = "none";';
                     $output .= '    });';
                     $output .= '    ';
-                    $output .= '    img3.addEventListener("click", function() {';
+                    $output .= '    tab3.addEventListener("click", function() {';
                     $output .= '        section1.style.display = "none";';
                     $output .= '        section2.style.display = "none";';
                     $output .= '        section3.style.display = "block";';
@@ -3983,7 +4150,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '        section6.style.display = "none";';
                     $output .= '    });';
                     $output .= '    ';
-                    $output .= '    img4.addEventListener("click", function() {';
+                    $output .= '    tab4.addEventListener("click", function() {';
                     $output .= '        section1.style.display = "none";';
                     $output .= '        section2.style.display = "none";';
                     $output .= '        section3.style.display = "none";';
@@ -3992,7 +4159,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '        section6.style.display = "none";';
                     $output .= '    });';
                     $output .= '    ';
-                    $output .= '    img5.addEventListener("click", function() {';
+                    $output .= '    tab5.addEventListener("click", function() {';
                     $output .= '        section1.style.display = "none";';
                     $output .= '        section2.style.display = "none";';
                     $output .= '        section3.style.display = "none";';
@@ -4001,7 +4168,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     $output .= '        section6.style.display = "none";';
                     $output .= '    });';
                     $output .= '    ';
-                    $output .= '    img6.addEventListener("click", function() {';
+                    $output .= '    tab6.addEventListener("click", function() {';
                     $output .= '        section1.style.display = "none";';
                     $output .= '        section2.style.display = "none";';
                     $output .= '        section3.style.display = "none";';
@@ -5202,24 +5369,30 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $fecha_pago = $fechas_nuevo ? date('Y-m-d', strtotime($fechas_nuevo)) : '0000-00-00';
             $cantidad_pago = intval($tyme_credit_nuevo);
             $db = JFactory::getDbo();
-
+    
             // Verificar si ya existe un registro con el mismo order_number
             $queryCheck = $db->getQuery(true)
                 ->select($db->quoteName('id'))
                 ->from($db->quoteName('josmwt_pago_order'))
                 ->where($db->quoteName('order_number') . ' = ' . $db->quote($order_number));
-
+    
             $db->setQuery($queryCheck);
             $existingRecord = $db->loadResult();
-
+    
             if ($existingRecord) {
                 // Si existe, genera un contador y concaténalo con $additional_info_nuevo
                 $counter = $this->generateCounterForDuplicateOrderNumber3($order_number);
                 $nombreArchivo = $nombreArchivo . '_' . $counter;
             }
-
+    
             // Insertar datos en la tabla josmwt_pago_order
             $status2 = ($tipo_pago == 'Parcial') ? 'Pago Parcial' : 'Pago Completo';
+            
+            // Verificar si la cantidad total pagada excede el precio total de la orden
+            if (!$this->checkPaymentStatus($order_number, $cantidad_pago)) {
+                throw new Exception('La cantidad total pagada excede el precio total de la orden.');
+            }
+            
             $columns = array('comprobante', 'order_number', 'tipo_pago', 'cantidad_pago', 'metodo_pago', 'fecha_pago', 'adiccional', 'status', 'nombre');
             $values = array(
                 $db->quote($filePath),
@@ -5263,6 +5436,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             throw new Exception('Error saving data to despacho: ' . $e->getMessage());
         }
     }
+    
     private function generateCounterForDuplicateOrderNumber3($order_number)
     {
         $db = JFactory::getDbo();
@@ -5270,13 +5444,14 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             ->select('COUNT(*)')
             ->from($db->quoteName('josmwt_pago_order'))
             ->where($db->quoteName('order_number') . ' = ' . $db->quote($order_number));
-
+    
         $db->setQuery($query);
         $count = $db->loadResult();
-
+    
         return $count + 1;
     }
-    //funcion buscar pagos parciales
+    
+    // Función para buscar pagos parciales
     function checkPaymentStatus($order_number, $orderFullPrice) {
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
@@ -5294,6 +5469,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             return true; 
         }
     }
+    
     
     //funcion para obtener la informacion despacho
     public function getdespacho($order_number){
@@ -6575,20 +6751,863 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             ';
             $css .= '
             ' . $addon_id . ' .sppb-addon {
-                max-width: 900px;
+                max-width: 1280px;
                 margin: auto;
                 padding: 20px;
                 border-radius: 10px;
                 box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
                 background-color: #ffffff; 
                 transition: all 0.3s ease-in-out; 
+                text-align: center;
             }
             ' . $addon_id . ' .sppb-addon:hover {
                 box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
             }
             
-        ';
-        
+            ';
+            $css .= '
+            ' . $addon_id . ' .sppb-addon input[type="text"],
+            ' . $addon_id . ' .sppb-addon select,
+            ' . $addon_id . ' .sppb-addon input[type="date"] {
+                text-align: center; 
+            }
+            ';
+
+
+            $css .= "
+                .tab {
+                    position: relative;
+                    background-color: #f0f0f0; /* Color de fondo de las pestañas */
+                    border-radius: 20px 20px 0 0; /* Bordes redondeados en la parte superior */
+                    padding: 10px 40px; /* Espacio interno */
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+                }
+
+                .tab.active {
+                    background-color: #e0e0e0; /* Color de fondo cuando está activa */
+                }
+
+                /* Colores de las pestañas */
+                .blue-tab {
+                    background-color: #cfe2ff; /* Azul */
+                }
+
+                .green-tab {
+                    background-color: #d3f4d2; /* Verde */
+                }
+
+                .purple-tab {
+                    background-color: #e9d8fd; /* Purpura */
+                }
+
+                .pink-tab {
+                    background-color: #fdd0e9; /* Rosado */
+                }
+
+                .orange-tab {
+                    background-color: #ffd8b2; /* Naranja */
+                }
+
+                .yellow-tab {
+                    background-color: #fff2a9; /* Amarillo */
+                }
+                .tab:before {
+                    content: '';
+                    position: absolute;
+                    bottom: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-bottom: 10px solid #f0f0f0; 
+                }
+
+                .tab.active:before {
+                    border-bottom-color: #e0e0e0; 
+                }
+                .tab.active3 {
+                    border: 2px solid rgba(41, 41, 41, 0.3); 
+                }
+                
+                ";
+                $css .= "
+                    .tab-content {
+                        position: relative;
+                        background-color: #DBE9FF; 
+                        border-radius: 0 0 20px 20px;
+                        padding: 10px 225px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc; 
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                        margin-top: -12px;
+                    }
+
+                    .tab-content:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #DBE9FF;
+                    }
+                    .tab-content .img-container2 img {
+                        width: 540px;
+                        height: auto;
+                        max-width: 100%; 
+                        border-radius: 10px;
+                        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                        transition: all 0.3s ease-in-out;    
+                    }
+                ";
+                $css .= "
+                    .tab-content-1 {
+                        position: relative;
+                        background-color: #DBE9FF; 
+                        border-radius: 0 0 20px 20px; 
+                        padding: 10px 240px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc; 
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                        margin-top: -12px;
+                    }
+
+                    .tab-content-1:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #DBE9FF; 
+                    }
+                ";
+
+                $css .= "
+                    .tab-content2 {
+                        position: relative;
+                        background-color: #E2FAE1; 
+                        border-radius: 0 0 20px 20px; 
+                        padding: 10px 252px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc; 
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                        margin-top: -12px;
+                    }
+                    .tab-content2 .img-container2 img {
+                        width: 486px;
+                        height: auto;
+                        max-width: 100%; 
+                        border-radius: 10px;
+                        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                        transition: all 0.3s ease-in-out;    
+                    }                   
+
+                    .tab-content2:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #E2FAE1; 
+                    }
+                    .tab-content2 input[type='text'],
+                    .tab-content2 input[type='date'] {
+                        width: 100%; /* Define el ancho deseado */
+                        height: 30px; /* Define la altura deseada */
+                    }
+                ";
+                $css .= "
+                    .tab-content2-1 {
+                        position: relative;
+                        background-color: #E2FAE1;
+                        border-radius: 0 0 20px 20px; 
+                        padding: 10px 286px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc; 
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                        margin-top: -12px;
+                    }
+
+                    .tab-content2-1:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #E2FAE1; 
+                    }
+                    .tab-content2-1 .img-container2 img {
+                        width: 420px;
+                        height: auto;
+                        max-width: 100%; 
+                        border-radius: 10px;
+                        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                        transition: all 0.3s ease-in-out;    
+                    }      
+                    
+                ";
+                $css .= "
+                    .tab-content3 {
+                        position: relative;
+                        background-color: #F1E8FC; 
+                        border-radius: 0 0 20px 20px; 
+                        padding: 10px 230px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc; 
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                        margin-top: -12px;
+                    }
+                    #section3.tab-content3.empty-packs {
+                        padding: 10px 168px;  
+                    }                    
+                    
+                    .tab-content3 .img-container2 {
+                        width: 100%; 
+                        height: 100%; 
+                        position: relative; 
+                    }
+                    
+                    .tab-content3 .img-wrapper {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                        overflow: hidden; 
+                    }
+                    
+                    .tab-content3 .img-wrapper img {
+                        width: 100%; 
+                        height: auto; 
+                        border-radius: 10px;
+                        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                        transition: all 0.3s ease-in-out;
+                    }
+
+                    .tab-content3 .button-container {
+                        position: absolute; 
+                        top: 110%; 
+                        left: 29%; /
+                        transform: translate(-50%, -50%); 
+                        z-index: 1; 
+                    }
+                    
+
+                    .tab-content3:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #F1E8FC; 
+                    }
+                    .tab-content3 input[type='text'],
+                    .tab-content3 select {
+                        width: 250%; 
+                        max-width: 550px; 
+                        padding: 5px; 
+                        box-sizing: border-box;
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                ";
+                $css .= "
+                .tab-content3-1 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 240px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+                #section3.tab-content3-1.empty-packs {
+                    padding: 10px 168px;  
+                }                    
+                
+                .tab-content3-1 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+                
+                .tab-content3-1 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+                
+                .tab-content3-1 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+
+                .tab-content3-1 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 29%; /
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+                
+
+                .tab-content3-1:before {
+                    content: '';
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+                .tab-content3-1 input[type='text'],
+                .tab-content3-1 select {
+                    width: 250%; 
+                    max-width: 550px; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            ";
+                $css .= "
+                    .tab-content4 {
+                        position: relative;
+                        background-color: #FEDFF0; 
+                        border-radius: 0 0 20px 20px; 
+                        padding: 10px 240px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc; 
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                        margin-top: -12px;
+                    }
+
+                    .tab-content4:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #FEDFF0;
+                    }
+                    .tab-content4 input[type='text'],
+                    .tab-content4 select,
+                    .tab-content4 input[type='date'] {
+                        width: 250%;
+                        max-width: 480px;
+                        padding: 5px;
+                        box-sizing: border-box;
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                ";
+                $css .= "
+                .tab-content4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 280px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                .tab-content4-1:before {
+                    content: '';
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                .tab-content4-1 input[type='text'],
+                .tab-content4-1 select,
+                .tab-content4-1 input[type='date'] {
+                    width: 250%;
+                    max-width: 480px;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            ";
+                $css .= "
+                    .tab-content4-2 {
+                        position: relative;
+                        background-color: #FEDFF0; 
+                        border-radius: 0 0 20px 20px; 
+                        padding: 10px 210px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc; 
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                        margin-top: -12px;
+                    }
+
+                    .tab-content4-2:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #FEDFF0;
+                    }
+                    .tab-content4-2 input[type='text'],
+                    .tab-content4-2 select{
+                        width: 250%; 
+                        max-width: 480px; 
+                        padding: 5px;
+                        box-sizing: border-box;
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                   
+                    
+                ";
+                $css .= "
+                    .tab-content4-3 {
+                        position: relative;
+                        background-color: #FEDFF0; 
+                        border-radius: 0 0 20px 20px; 
+                        padding: 10px 220px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc; 
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                        margin-top: -12px;
+                    }
+
+                    .tab-content4-3:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #FEDFF0; 
+                    }
+                    .tab-content4-3 input[type='text'],
+                    .tab-content4-3 select,
+                    .tab-content4-3 input[type='date'] {
+                        width: 250%; 
+                        max-width: 480px; 
+                        padding: 5px; 
+                        box-sizing: border-box;
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                ";
+                $css .= "
+                    .tab-content4-4 {
+                        position: relative;
+                        background-color: #FEDFF0; 
+                        border-radius: 0 0 20px 20px; 
+                        padding: 10px 282px;
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc;
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                        margin-top: -12px;
+                    }
+
+                    .tab-content4-4:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #FEDFF0; 
+                    }
+                    .tab-content4-4 input[type='text'],
+                    .tab-content4-4 select,
+                    .tab-content4-4 input[type='date'] {
+                        width: 250%;
+                        max-width: 480px;
+                        padding: 5px; 
+                        box-sizing: border-box; 
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                    
+                ";
+                $css .= "
+                    .tab-content4-5 {
+                        position: relative;
+                        background-color: #FEDFF0;
+                        border-radius: 0 0 20px 20px;
+                        padding: 10px 236px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc;
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                        margin-top: -12px;
+                    }
+
+                    .tab-content4-5:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #FEDFF0;
+                    }
+                    .tab-content4-5 input[type='text'],
+                    .tab-content4-5 select,
+                    .tab-content4-5 input[type='date'] {
+                        width: 250%; 
+                        max-width: 480px; 
+                        padding: 5px;
+                        box-sizing: border-box; 
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                ";
+                $css .= "
+                .tab-content4-1-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 280px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                .tab-content4-1-1:before {
+                    content: '';
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                .tab-content4-1-1 input[type='text'],
+                .tab-content4-1-1 select,
+                .tab-content4-1-1 input[type='date'] {
+                    width: 250%;
+                    max-width: 480px;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            ";
+                $css .= "
+                    .tab-content4-2-1 {
+                        position: relative;
+                        background-color: #FEDFF0;
+                        border-radius: 0 0 20px 20px; 
+                        padding: 10px 210px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc; 
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                        margin-top: -12px;
+                    }
+
+                    .tab-content4-2-1:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #FEDFF0;
+                    }
+                    .tab-content4-2-1 input[type='text'],
+                    .tab-content4-2-1 select{
+                        width: 250%; 
+                        max-width: 480px;
+                        padding: 5px;
+                        box-sizing: border-box;
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                   
+                    
+                ";
+                $css .= "
+                    .tab-content4-3-1 {
+                        position: relative;
+                        background-color: #FEDFF0; 
+                        border-radius: 0 0 20px 20px;
+                        padding: 10px 282px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc;
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                        margin-top: -12px;
+                    }
+
+                    .tab-content4-3-1:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #FEDFF0;
+                    }
+                    .tab-content4-3-1 input[type='text'],
+                    .tab-content4-3-1 select,
+                    .tab-content4-3-1 input[type='date'] {
+                        width: 250%; 
+                        max-width: 480px;
+                        padding: 5px;
+                        box-sizing: border-box; 
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                ";
+                $css .= "
+                    .tab-content4-4-1 {
+                        position: relative;
+                        background-color: #FEDFF0; 
+                        border-radius: 0 0 20px 20px; 
+                        padding: 10px 260px;
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc;
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                        margin-top: -12px;
+                    }
+
+                    .tab-content4-4-1:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #FEDFF0;
+                    }
+                    .tab-content4-4-1 input[type='text'],
+                    .tab-content4-4-1 select,
+                    .tab-content4-4-1 input[type='date'] {
+                        width: 250%;
+                        max-width: 480px;
+                        padding: 5px;
+                        box-sizing: border-box; 
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                    
+                ";
+                $css .= "
+                    .tab-content4-5-1 {
+                        position: relative;
+                        background-color: #FEDFF0;
+                        border-radius: 0 0 20px 20px; 
+                        padding: 10px 236px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc; 
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                        margin-top: -12px;
+                    }
+
+                    .tab-content4-5-1:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #FEDFF0; 
+                    }
+                    .tab-content4-5-1 input[type='text'],
+                    .tab-content4-5-1 select,
+                    .tab-content4-5-1 input[type='date'] {
+                        width: 250%; 
+                        max-width: 480px; 
+                        padding: 5px; 
+                        box-sizing: border-box; 
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                ";
+                $css .= "
+                    .tab-content5 {
+                        position: relative;
+                        background-color: #ffd8b2; 
+                        border-radius: 0 0 20px 20px; 
+                        padding: 10px 222px; 
+                        transition: background-color 0.3s ease;
+                        border: 1px solid #ccc; 
+                        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                        margin-top: -12px;
+                    }
+
+                    .tab-content5:before {
+                        content: '';
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-top: 10px solid #ffd8b2;
+                    }
+                    .tab-content5 input[type='text'],
+                    .tab-content5 select,
+                    .tab-content5 input[type='date'] {
+                        width: 250%; 
+                        max-width: 480px; 
+                        padding: 5px;
+                        box-sizing: border-box; 
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                ";
+                $css .= "
+                .tab-content5-1 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 240px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                .tab-content5-1:before {
+                    content: '';
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                .tab-content5-1 input[type='text'],
+                .tab-content5-1 select,
+                .tab-content5-1 input[type='date'] {
+                    width: 250%; 
+                    max-width: 480px; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            ";
+            $css .= "
+            .tab-content6 {
+                position: relative;
+                background-color: #FFF5BA; 
+                border-radius: 0 0 20px 20px; 
+                padding: 10px 238px; 
+                transition: background-color 0.3s ease;
+                border: 1px solid #ccc; 
+                box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                margin-top: -12px;
+            }
+
+            .tab-content6:before {
+                content: '';
+                position: absolute;
+                top: 0px;
+                left: 0;
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-top: 10px solid #FFF5BA;
+            }
+            .tab-content6 input[type='text'],
+            .tab-content6 select,
+            .tab-content6 input[type='date'],
+            .tab-content6 input[type='number'],
+            .tab-content6 textarea {
+                
+                width: 250%; 
+                max-width: 480px; 
+                padding: 5px;
+                box-sizing: border-box; 
+                margin: 0 auto;
+                text-align: center;
+            }
+            ";
+            $css .= "
+            .tab-content6-1 {
+                position: relative;
+                background-color: #FFF5BA; 
+                border-radius: 0 0 20px 20px; 
+                padding: 10px 238px; 
+                transition: background-color 0.3s ease;
+                border: 1px solid #ccc; 
+                box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                margin-top: -12px;
+            }
+
+            .tab-content6-1:before {
+                content: '';
+                position: absolute;
+                top: 0px;
+                left: 0;
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-top: 10px solid #FFF5BA;
+            }
+            .tab-content6-1 input[type='text'],
+            .tab-content6-1 select,
+            .tab-content6-1 input[type='date'],
+            .tab-content6-1 input[type='number'],
+            .tab-content6-1 textarea {
+                
+                width: 250%; 
+                max-width: 480px; 
+                padding: 5px;
+                box-sizing: border-box; 
+                margin: 0 auto;
+                text-align: center;
+            }
+            ";
+
+            $css .= "
+            .tab-content6-1-1 {
+                position: relative;
+                background-color: #FFF5BA; 
+                border-radius: 0 0 20px 20px; 
+                padding: 10px 200px; 
+                transition: background-color 0.3s ease;
+                border: 1px solid #ccc; 
+                box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                margin-top: -12px;
+            }
+
+            .tab-content6-1-1:before {
+                content: '';
+                position: absolute;
+                top: 0px;
+                left: 0;
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-top: 10px solid #FFF5BA;
+            }
+            .tab-content6-1-1 input[type='text'],
+            .tab-content6-1-1 select,
+            .tab-content6-1-1 input[type='date'],
+            .tab-content6-1-1 input[type='number'],
+            .tab-content6-1-1 textarea {
+                
+                width: 250%; 
+                max-width: 480px; 
+                padding: 5px;
+                box-sizing: border-box; 
+                margin: 0 auto;
+                text-align: center;
+            }
+            .tab-content6-1-1 .img-container2 img {
+                width: 290px;
+                height: auto; 
+            }
+            ";
+                
             $css .= '
             ' . $addon_id . ' .form-group {
                 margin-bottom: 2rem;
@@ -6620,6 +7639,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 padding: 6px;
                 box-sizing: border-box;
                 font-size: 15px;
+                text-align: center;
             }
             
             ' . $addon_id . ' select:focus {
@@ -6635,23 +7655,26 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             $css .= '
             ' . $addon_id . ' input[type="number"] {
                 flex: 1 0 100%;
+                text-align: center;
                 border-radius: 8px;
                 border: 2px solid #3498db;
                 transition: border 0.3s ease-in-out; 
                 padding: 10px;
                 box-sizing: border-box;
                 font-size: 16px;
-                -moz-appearance: textfield; /* Firefox */
+                -moz-appearance: textfield; 
             }
 
             ' . $addon_id . ' input[type="number"]::-webkit-inner-spin-button,
             ' . $addon_id . ' input[type="number"]::-webkit-outer-spin-button {
                 -webkit-appearance: none;
                 margin: 0;
+                text-align: center;
             }
 
             ' . $addon_id . ' input[type="number"]:focus {
                 border-color: #007bff !important; 
+                text-align: center;
             }
             ';
 
@@ -6691,9 +7714,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     filter: none; 
                     background-color: #a5cfd4;
                 }
-                ' . $addon_id . ' .img.active3 {
-                    border: 2px solid rgba(41, 41, 41);
-                }
+                
                 ' . $addon_id . ' {
                     display: flex;
                     flex-wrap: wrap;
@@ -6705,17 +7726,9 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     max-width: calc(20% - 20px);
                     margin-right: 20px;
                     margin-bottom: 20px;
-                }
-                
-                ' . $addon_id . ' .img-container2 img {
-                    width: 100%;
-                    height: auto;
-                    max-width: 100%; 
-                    border-radius: 10px;
-                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-                    transition: all 0.3s ease-in-out;
                     
                 }
+                
                 
                 ' . $addon_id . ' .invoice-number {
                     font-size: 14px; 
@@ -6730,14 +7743,44 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
             ';
             
             $css .= '
-            @media (max-width: 768px) {
+            @media (max-width: 800px) {
                 ' . $addon_id . ' .sppb-addon {
-                    max-width: 100%;
-                    padding: 1em; 
-                    box-sizing: border-box; 
-                    margin: auto;
-                    text-align: center; 
+                    max-width: calc(100% - 40px);
+                    padding: 10px; 
                 }
+            
+                ' . $addon_id . ' .tab {
+                    padding: 10px 10px;
+                }
+            
+                ' . $addon_id . ' .tab-content {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 105px;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex; 
+                    justify-content: center;
+                    align-items: center; 
+                }
+            
+                ' . $addon_id . ' .tab-content-1 {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                
                 ' . $addon_id . ' .container {
                     display: flex;
                     flex-direction: column;
@@ -6786,7 +7829,7 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     max-width: 25%; 
                     margin: 0 auto; 
                 }
-                .status-text {
+                ' . $addon_id . ' .status-text {
                     font-size: 10px;
                     margin-top: 0.2em; 
                 }
@@ -6810,22 +7853,8296 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                     padding: 0.3em; 
                 }
 
+                ' . $addon_id . ' .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                }
                 ' . $addon_id . ' .form-group .btn,
-                ' . $addon_id . ' .form-group .btn-primary,
                 ' . $addon_id . ' .form-group .btn-danger,
+                ' . $addon_id . ' .form-group .btn-primary,
                 ' . $addon_id . ' .form-group .btn-warning {
                     border-radius: 8px;
                     padding: 0.5em 1em; 
                     font-size: 12px; 
-                    margin-top: 0.5em;
+                    margin-top: 1.5em; /* Ajusta el margen superior según sea necesario */
+                    margin-left: auto; /* Centra horizontalmente */
+                    margin-right: auto; /* Centra horizontalmente */
+                    display: block; /* Asegura que el botón sea un bloque para centrarlo horizontalmente */
                 }
-
+                
                 ' . $addon_id . ' form {
                     width: 100%;
                     box-sizing: border-box;
                 }
+                ' . $addon_id . ' .tab-content2 {
+                    position: relative;
+                    background-color: #E2FAE1; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 135px; /* Ajusta el padding según sea necesario */
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' .tab-content2 .img-container2 img {
+                    width: 486px;
+                    height: auto;
+                    max-width: 100%; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;    
+                }                   
+            
+                ' . $addon_id . ' .tab-content2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                ' . $addon_id . ' .tab-content2-1 {
+                    position: relative;
+                    background-color: #E2FAE1;
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 120px; /* Ajusta el padding según sea necesario */
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' .tab-content2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                ' . $addon_id . ' .tab-content2-1 .img-container2 img {
+                    width: 100%;
+                    height: auto;
+                    max-width: 100%; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;     
+                }   
+                ' . $addon_id . ' .tab-content3 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 50%;
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+                ' . $addon_id . ' .tab-content3 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3.empty-packs {
+                    padding: 10px 168px;  
+                }                    
+            
+                ' . $addon_id . ' .tab-content3 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 input[type="text"],
+                ' . $addon_id . ' .tab-content3 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content3-1 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3-1.empty-packs {
+                    padding: 10px 168px;  
+                }                    
+            
+                ' . $addon_id . ' .tab-content3-1 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 29%; 
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content3-1 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 90px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' .tab-content4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="text"],
+                ' . $addon_id . ' .tab-content4 select,
+                ' . $addon_id . ' .tab-content4 input[type="date"],
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    width: 480px;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 80px;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content4-4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4 select,
+                ' . $addon_id . ' .tab-content4-4 input[type="date"] {
+                    width: 250%;
+                    max-width: 480px;
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-2 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content4-2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2 select{
+                    width: 250%; 
+                    max-width: 480px; 
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+                ' . $addon_id . ' .tab-content4-3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3 select,
+                ' . $addon_id . ' .tab-content4-3 input[type="date"] {
+                    width: 250%; 
+                    max-width: 480px; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1 select,
+                ' . $addon_id . ' .tab-content4-1 input[type="date"] {
+                    width: 250%;
+                    max-width: 480px;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-5 {
+                    position: relative;
+                    background-color: #FEDFF0;
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content4-5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5 select,
+                ' . $addon_id . ' .tab-content4-5 input[type="date"] {
+                    width: 250%; 
+                    max-width: 480px; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 {
+                    position: relative;
+                    background-color: #FEDFF0;
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content4-2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2-1 select{
+                    width: 250%; 
+                    max-width: 480px;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content4-3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3-1 select,
+                ' . $addon_id . ' .tab-content4-3-1 input[type="date"] {
+                    width: 250%; 
+                    max-width: 480px;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 80px;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content4-4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4-1 select,
+                ' . $addon_id . ' .tab-content4-4-1 input[type="date"] {
+                    width: 250%;
+                    max-width: 480px;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-5-1 {
+                    position: relative;
+                    background-color: #FEDFF0;
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content4-5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5-1 select,
+                ' . $addon_id . ' .tab-content4-5-1 input[type="date"] {
+                    width: 250%; 
+                    max-width: 480px; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content4-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1-1 select,
+                ' . $addon_id . ' .tab-content4-1-1 input[type="date"] {
+                    width: 250%;
+                    max-width: 480px;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 105px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="text"],
+                ' . $addon_id . ' .tab-content5 select,
+                ' . $addon_id . '.tab-content5 input[type="date"] {
+                    width: 250%; 
+                    max-width: 480px; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5-1 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content5-1 select,
+                ' . $addon_id . '.tab-content5-1 input[type="date"] {
+                    width: 250%; 
+                    max-width: 480px; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 116px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6 input[type="text"],
+                ' . $addon_id . ' .tab-content6 select,
+                ' . $addon_id . ' .tab-content6 input[type="date"],
+                ' . $addon_id . ' .tab-content6 input[type="number"],
+                ' . $addon_id . ' .tab-content6 textarea {
+                    width: 250%; 
+                    max-width: 480px; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1 select,
+                ' . $addon_id . ' .tab-content6-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 80px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1-1 select,
+                ' . $addon_id . ' .tab-content6-1-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .tab-content6-1-1 .img-container2 img {
+                    width: 290px;
+                    height: auto; 
+                }
+                
             }
-        ';
+            
+            ';
+
+            $css .= '
+            @media (max-width: 500px) {
+                ' . $addon_id . ' .sppb-addon {
+                    max-width: calc(100% - 20px);
+                    padding: 10px;
+                }
+                ' . $addon_id . ' input[type="file"] {
+                    font-size: 12px;
+                }
+            
+                ' . $addon_id . ' .tab {
+                    padding: 5px 5px; 
+                    max-width: calc(100% - 10px); 
+                    overflow-x: auto;
+                    font-size: 10px;
+                }
+
+                ' . $addon_id . ' .tab  span {
+                    font-size: 5px;
+                }
+            
+                ' . $addon_id . ' .tab-content {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 105px;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex; 
+                    justify-content: center;
+                    align-items: center; 
+                }
+            
+                ' . $addon_id . ' .tab-content-1 {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 101%;
+                }
+                
+                ' . $addon_id . ' .container {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center; 
+                    flex-wrap: wrap;
+                }
+               
+                
+                ' . $addon_id . ' .invoice-number {
+                    font-size: 14px; 
+                    margin-top: 5px; 
+                }
+                
+                ' . $addon_id . ' .button-group button {
+                    font-size: 10px; 
+                    margin-left: 2px;
+                }
+        
+                ' . $addon_id . ' .form-group {
+                    margin-bottom: 1rem; 
+                    flex-direction: column; 
+                    align-items: center;
+                    justify-content: center;
+                }
+        
+               
+                ' . $addon_id . ' .status-text {
+                    font-size: 10px;
+                    margin-top: 0.2em; 
+                }
+        
+                
+                ' . $addon_id . ' .form-control,
+                ' . $addon_id . ' #document_upload,
+                ' . $addon_id . ' select {
+                    border-radius: 8px;
+                    border: 2px solid #3498db;
+                    font-size: 12px; 
+                    margin-bottom: 0.5em;
+                    box-sizing: border-box;
+                    width: calc(100% - 2em); 
+                    padding: 0.3em; 
+                }
+
+                ' . $addon_id . ' .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                }
+                ' . $addon_id . ' .form-group .btn,
+                ' . $addon_id . ' .form-group .btn-danger,
+                ' . $addon_id . ' .form-group .btn-primary,
+                ' . $addon_id . ' .form-group .btn-warning {
+                    border-radius: 8px;
+                    padding: 0.5em 1em; 
+                    font-size: 12px; 
+                    margin-top: 1.5em; 
+                    margin-left: auto; 
+                    margin-right: auto; 
+                    display: block; 
+                }
+                
+                ' . $addon_id . ' form {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                ' . $addon_id . ' .tab-content2 {
+                    position: relative;
+                    background-color: #E2FAE1; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 135px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' .tab-content2 .img-container2 img {
+                    width: 486px;
+                    height: auto;
+                    max-width: 100%; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;    
+                }                   
+            
+                ' . $addon_id . ' .tab-content2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                ' . $addon_id . ' .tab-content2-1 {
+                    position: relative;
+                    background-color: #E2FAE1;
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                
+                ' . $addon_id . ' .tab-content3 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 50%;
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+                ' . $addon_id . ' .tab-content3 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3.empty-packs {
+                    padding: 10px 168px;  
+                }                    
+            
+                ' . $addon_id . ' .tab-content3 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 input[type="text"],
+                ' . $addon_id . ' .tab-content3 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content3-1 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3-1.empty-packs {
+                    padding: 10px 10px !important;   
+                }                    
+            
+                ' . $addon_id . ' .tab-content3-1 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 29%; 
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content3-1 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="text"],
+                ' . $addon_id . ' .tab-content4 select,
+                ' . $addon_id . ' .tab-content4 input[type="date"],
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    width: 480px;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4 select,
+                ' . $addon_id . ' .tab-content4-4 input[type="date"] {
+                    width: 100%;
+                    max-width: 100px;
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-3 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+                ' . $addon_id . ' .tab-content4-3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3 select,
+                ' . $addon_id . ' .tab-content4-3 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1 select,
+                ' . $addon_id . ' .tab-content4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-5 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5 select,
+                ' . $addon_id . ' .tab-content4-5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2-1 select{
+                    width: 100%; 
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 {
+                    position: relative;
+                    background-color: #FEDFF0;
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 10px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%; /* Reduced width */
+                    
+                }
+                ' . $addon_id . ' .tab-content4-3-1 .img-container2 img {
+                    max-width: 20px; 
+                    max-height: 20px; 
+                }
+
+                ' . $addon_id . ' .tab-content4-3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3-1 select,
+                ' . $addon_id . ' .tab-content4-3-1 input[type="date"] {
+                    width: 50%; 
+                    max-width: 50%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4-1 select,
+                ' . $addon_id . ' .tab-content4-4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-5-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5-1 select,
+                ' . $addon_id . ' .tab-content4-5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1-1 select,
+                ' . $addon_id . ' .tab-content4-1-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="text"],
+                ' . $addon_id . ' .tab-content5 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                ' . $addon_id . ' .tab-content5-1 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content5-1 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                
+                ' . $addon_id . ' .tab-content6 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6 input[type="text"],
+                ' . $addon_id . ' .tab-content6 select,
+                ' . $addon_id . ' .tab-content6 input[type="date"],
+                ' . $addon_id . ' .tab-content6 input[type="number"],
+                ' . $addon_id . ' .tab-content6 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1 select,
+                ' . $addon_id . ' .tab-content6-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1-1 select,
+                ' . $addon_id . ' .tab-content6-1-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            }
+            ';
+            $css .= '
+            @media (max-width: 430px) {
+                ' . $addon_id . ' .sppb-addon {
+                    max-width: calc(100% - 20px);
+                    padding: 10px;
+                }
+                ' . $addon_id . ' input[type="file"] {
+                    font-size: 12px;
+                }
+            
+                ' . $addon_id . ' .tab {
+                    padding: 6px 6px; 
+                    max-width: calc(100% - 10px); 
+                    overflow-x: auto;
+                    font-size: 10px;
+                }
+
+                ' . $addon_id . ' .tab  span {
+                    font-size: 5px;
+                }
+            
+                ' . $addon_id . ' .tab-content {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 105px;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex; 
+                    justify-content: center;
+                    align-items: center; 
+                }
+            
+                ' . $addon_id . ' .tab-content-1 {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 101%;
+                }
+                
+                ' . $addon_id . ' .container {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center; 
+                    flex-wrap: wrap;
+                }
+               
+                
+                ' . $addon_id . ' .invoice-number {
+                    font-size: 14px; 
+                    margin-top: 5px; 
+                }
+                
+                ' . $addon_id . ' .button-group button {
+                    font-size: 10px; 
+                    margin-left: 2px;
+                }
+        
+                ' . $addon_id . ' .form-group {
+                    margin-bottom: 1rem; 
+                    flex-direction: column; 
+                    align-items: center;
+                    justify-content: center;
+                }
+        
+               
+                ' . $addon_id . ' .status-text {
+                    font-size: 10px;
+                    margin-top: 0.2em; 
+                }
+        
+                
+                ' . $addon_id . ' .form-control,
+                ' . $addon_id . ' #document_upload,
+                ' . $addon_id . ' select {
+                    border-radius: 8px;
+                    border: 2px solid #3498db;
+                    font-size: 12px; 
+                    margin-bottom: 0.5em;
+                    box-sizing: border-box;
+                    width: calc(100% - 2em); 
+                    padding: 0.3em; 
+                }
+
+                ' . $addon_id . ' .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                }
+                ' . $addon_id . ' .form-group .btn,
+                ' . $addon_id . ' .form-group .btn-danger,
+                ' . $addon_id . ' .form-group .btn-primary,
+                ' . $addon_id . ' .form-group .btn-warning {
+                    border-radius: 8px;
+                    padding: 0.5em 1em; 
+                    font-size: 12px; 
+                    margin-top: 1.5em; 
+                    margin-left: auto; 
+                    margin-right: auto; 
+                    display: block; 
+                }
+                
+                ' . $addon_id . ' form {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                ' . $addon_id . ' .tab-content2 {
+                    position: relative;
+                    background-color: #E2FAE1; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 135px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' .tab-content2 .img-container2 img {
+                    width: 486px;
+                    height: auto;
+                    max-width: 100%; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;    
+                }                   
+            
+                ' . $addon_id . ' .tab-content2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                ' . $addon_id . ' .tab-content2-1 {
+                    position: relative;
+                    background-color: #E2FAE1;
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                
+                ' . $addon_id . ' .tab-content3 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 50%;
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+                ' . $addon_id . ' .tab-content3 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3.empty-packs {
+                    padding: 10px 168px;  
+                }                    
+            
+                ' . $addon_id . ' .tab-content3 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 input[type="text"],
+                ' . $addon_id . ' .tab-content3 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content3-1 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3-1.empty-packs {
+                    padding: 10px 10px !important;   
+                }                    
+            
+                ' . $addon_id . ' .tab-content3-1 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 29%; 
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content3-1 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="text"],
+                ' . $addon_id . ' .tab-content4 select,
+                ' . $addon_id . ' .tab-content4 input[type="date"],
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    width: 480px;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4 select,
+                ' . $addon_id . ' .tab-content4-4 input[type="date"] {
+                    width: 100%;
+                    max-width: 100px;
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-3 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+                ' . $addon_id . ' .tab-content4-3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3 select,
+                ' . $addon_id . ' .tab-content4-3 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1 select,
+                ' . $addon_id . ' .tab-content4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-5 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5 select,
+                ' . $addon_id . ' .tab-content4-5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2-1 select{
+                    width: 100%; 
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 {
+                    position: relative;
+                    background-color: #FEDFF0;
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 10px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%; /* Reduced width */
+                    
+                }
+                ' . $addon_id . ' .tab-content4-3-1 .img-container2 img {
+                    max-width: 20px; 
+                    max-height: 20px; 
+                }
+
+                ' . $addon_id . ' .tab-content4-3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3-1 select,
+                ' . $addon_id . ' .tab-content4-3-1 input[type="date"] {
+                    width: 50%; 
+                    max-width: 50%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4-1 select,
+                ' . $addon_id . ' .tab-content4-4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-5-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5-1 select,
+                ' . $addon_id . ' .tab-content4-5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1-1 select,
+                ' . $addon_id . ' .tab-content4-1-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="text"],
+                ' . $addon_id . ' .tab-content5 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                ' . $addon_id . ' .tab-content5-1 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content5-1 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                
+                ' . $addon_id . ' .tab-content6 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6 input[type="text"],
+                ' . $addon_id . ' .tab-content6 select,
+                ' . $addon_id . ' .tab-content6 input[type="date"],
+                ' . $addon_id . ' .tab-content6 input[type="number"],
+                ' . $addon_id . ' .tab-content6 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1 select,
+                ' . $addon_id . ' .tab-content6-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1-1 select,
+                ' . $addon_id . ' .tab-content6-1-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            }
+            ';
+            $css .= '
+            @media (max-width: 415px) {
+                ' . $addon_id . ' .sppb-addon {
+                    max-width: calc(100% - 20px);
+                    padding: 10px;
+                }
+                ' . $addon_id . ' input[type="file"] {
+                    font-size: 12px;
+                }
+            
+                ' . $addon_id . ' .tab {
+                    padding: 5px 5px; 
+                    max-width: calc(100% - 10px); 
+                    overflow-x: auto;
+                    font-size: 10px;
+                }
+
+                ' . $addon_id . ' .tab  span {
+                    font-size: 5px;
+                }
+            
+                ' . $addon_id . ' .tab-content {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 105px;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex; 
+                    justify-content: center;
+                    align-items: center; 
+                }
+            
+                ' . $addon_id . ' .tab-content-1 {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 101%;
+                }
+                
+                ' . $addon_id . ' .container {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center; 
+                    flex-wrap: wrap;
+                }
+               
+                
+                ' . $addon_id . ' .invoice-number {
+                    font-size: 14px; 
+                    margin-top: 5px; 
+                }
+                
+                ' . $addon_id . ' .button-group button {
+                    font-size: 10px; 
+                    margin-left: 2px;
+                }
+        
+                ' . $addon_id . ' .form-group {
+                    margin-bottom: 1rem; 
+                    flex-direction: column; 
+                    align-items: center;
+                    justify-content: center;
+                }
+        
+               
+                ' . $addon_id . ' .status-text {
+                    font-size: 10px;
+                    margin-top: 0.2em; 
+                }
+        
+                
+                ' . $addon_id . ' .form-control,
+                ' . $addon_id . ' #document_upload,
+                ' . $addon_id . ' select {
+                    border-radius: 8px;
+                    border: 2px solid #3498db;
+                    font-size: 12px; 
+                    margin-bottom: 0.5em;
+                    box-sizing: border-box;
+                    width: calc(100% - 2em); 
+                    padding: 0.3em; 
+                }
+
+                ' . $addon_id . ' .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                }
+                ' . $addon_id . ' .form-group .btn,
+                ' . $addon_id . ' .form-group .btn-danger,
+                ' . $addon_id . ' .form-group .btn-primary,
+                ' . $addon_id . ' .form-group .btn-warning {
+                    border-radius: 8px;
+                    padding: 0.5em 1em; 
+                    font-size: 12px; 
+                    margin-top: 1.5em; 
+                    margin-left: auto; 
+                    margin-right: auto; 
+                    display: block; 
+                }
+                
+                ' . $addon_id . ' form {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                ' . $addon_id . ' .tab-content2 {
+                    position: relative;
+                    background-color: #E2FAE1; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 135px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' .tab-content2 .img-container2 img {
+                    width: 486px;
+                    height: auto;
+                    max-width: 100%; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;    
+                }                   
+            
+                ' . $addon_id . ' .tab-content2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                ' . $addon_id . ' .tab-content2-1 {
+                    position: relative;
+                    background-color: #E2FAE1;
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                
+                ' . $addon_id . ' .tab-content3 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 50%;
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+                ' . $addon_id . ' .tab-content3 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3.empty-packs {
+                    padding: 10px 168px;  
+                }                    
+            
+                ' . $addon_id . ' .tab-content3 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 input[type="text"],
+                ' . $addon_id . ' .tab-content3 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content3-1 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3-1.empty-packs {
+                    padding: 10px 10px !important;   
+                }                    
+            
+                ' . $addon_id . ' .tab-content3-1 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 29%; 
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content3-1 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="text"],
+                ' . $addon_id . ' .tab-content4 select,
+                ' . $addon_id . ' .tab-content4 input[type="date"],
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    width: 480px;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4 select,
+                ' . $addon_id . ' .tab-content4-4 input[type="date"] {
+                    width: 100%;
+                    max-width: 100px;
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-3 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+                ' . $addon_id . ' .tab-content4-3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3 select,
+                ' . $addon_id . ' .tab-content4-3 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1 select,
+                ' . $addon_id . ' .tab-content4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-5 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5 select,
+                ' . $addon_id . ' .tab-content4-5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2-1 select{
+                    width: 100%; 
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 {
+                    position: relative;
+                    background-color: #FEDFF0;
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 10px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%; /* Reduced width */
+                    
+                }
+                ' . $addon_id . ' .tab-content4-3-1 .img-container2 img {
+                    max-width: 20px; 
+                    max-height: 20px; 
+                }
+
+                ' . $addon_id . ' .tab-content4-3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3-1 select,
+                ' . $addon_id . ' .tab-content4-3-1 input[type="date"] {
+                    width: 50%; 
+                    max-width: 50%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4-1 select,
+                ' . $addon_id . ' .tab-content4-4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-5-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5-1 select,
+                ' . $addon_id . ' .tab-content4-5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1-1 select,
+                ' . $addon_id . ' .tab-content4-1-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="text"],
+                ' . $addon_id . ' .tab-content5 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                ' . $addon_id . ' .tab-content5-1 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content5-1 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                
+                ' . $addon_id . ' .tab-content6 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6 input[type="text"],
+                ' . $addon_id . ' .tab-content6 select,
+                ' . $addon_id . ' .tab-content6 input[type="date"],
+                ' . $addon_id . ' .tab-content6 input[type="number"],
+                ' . $addon_id . ' .tab-content6 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1 select,
+                ' . $addon_id . ' .tab-content6-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1-1 select,
+                ' . $addon_id . ' .tab-content6-1-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            }
+            ';  
+            
+            $css .= '
+            @media (max-width: 400px) {
+                ' . $addon_id . ' .sppb-addon {
+                    max-width: calc(100% - 20px);
+                    padding: 10px;
+                }
+                ' . $addon_id . ' input[type="file"] {
+                    font-size: 12px;
+                }
+            
+                ' . $addon_id . ' .tab {
+                    padding: 5px 5px; 
+                    max-width: calc(100% - 10px); 
+                    overflow-x: auto;
+                    font-size: 9px;
+                }
+
+                ' . $addon_id . ' .tab  span {
+                    font-size: 5px;
+                }
+            
+                ' . $addon_id . ' .tab-content {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 105px;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex; 
+                    justify-content: center;
+                    align-items: center; 
+                }
+            
+                ' . $addon_id . ' .tab-content-1 {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 101%;
+                }
+                
+                ' . $addon_id . ' .container {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center; 
+                    flex-wrap: wrap;
+                }
+               
+                
+                ' . $addon_id . ' .invoice-number {
+                    font-size: 14px; 
+                    margin-top: 5px; 
+                }
+                
+                ' . $addon_id . ' .button-group button {
+                    font-size: 10px; 
+                    margin-left: 2px;
+                }
+        
+                ' . $addon_id . ' .form-group {
+                    margin-bottom: 1rem; 
+                    flex-direction: column; 
+                    align-items: center;
+                    justify-content: center;
+                }
+        
+               
+                ' . $addon_id . ' .status-text {
+                    font-size: 10px;
+                    margin-top: 0.2em; 
+                }
+        
+                
+                ' . $addon_id . ' .form-control,
+                ' . $addon_id . ' #document_upload,
+                ' . $addon_id . ' select {
+                    border-radius: 8px;
+                    border: 2px solid #3498db;
+                    font-size: 12px; 
+                    margin-bottom: 0.5em;
+                    box-sizing: border-box;
+                    width: calc(100% - 2em); 
+                    padding: 0.3em; 
+                }
+
+                ' . $addon_id . ' .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                }
+                ' . $addon_id . ' .form-group .btn,
+                ' . $addon_id . ' .form-group .btn-danger,
+                ' . $addon_id . ' .form-group .btn-primary,
+                ' . $addon_id . ' .form-group .btn-warning {
+                    border-radius: 8px;
+                    padding: 0.5em 1em; 
+                    font-size: 12px; 
+                    margin-top: 1.5em; 
+                    margin-left: auto; 
+                    margin-right: auto; 
+                    display: block; 
+                }
+                
+                ' . $addon_id . ' form {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                ' . $addon_id . ' .tab-content2 {
+                    position: relative;
+                    background-color: #E2FAE1; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 135px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' .tab-content2 .img-container2 img {
+                    width: 486px;
+                    height: auto;
+                    max-width: 100%; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;    
+                }                   
+            
+                ' . $addon_id . ' .tab-content2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                ' . $addon_id . ' .tab-content2-1 {
+                    position: relative;
+                    background-color: #E2FAE1;
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                
+                ' . $addon_id . ' .tab-content3 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 50%;
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+                ' . $addon_id . ' .tab-content3 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3.empty-packs {
+                    padding: 10px 168px;  
+                }                    
+            
+                ' . $addon_id . ' .tab-content3 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 input[type="text"],
+                ' . $addon_id . ' .tab-content3 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content3-1 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3-1.empty-packs {
+                    padding: 10px 10px !important;   
+                }                    
+            
+                ' . $addon_id . ' .tab-content3-1 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 29%; 
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content3-1 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="text"],
+                ' . $addon_id . ' .tab-content4 select,
+                ' . $addon_id . ' .tab-content4 input[type="date"],
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    width: 480px;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4 select,
+                ' . $addon_id . ' .tab-content4-4 input[type="date"] {
+                    width: 100%;
+                    max-width: 100px;
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-3 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+                ' . $addon_id . ' .tab-content4-3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3 select,
+                ' . $addon_id . ' .tab-content4-3 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1 select,
+                ' . $addon_id . ' .tab-content4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-5 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5 select,
+                ' . $addon_id . ' .tab-content4-5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2-1 select{
+                    width: 100%; 
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 {
+                    position: relative;
+                    background-color: #FEDFF0;
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 10px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%; /* Reduced width */
+                    
+                }
+                ' . $addon_id . ' .tab-content4-3-1 .img-container2 img {
+                    max-width: 20px; 
+                    max-height: 20px; 
+                }
+
+                ' . $addon_id . ' .tab-content4-3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3-1 select,
+                ' . $addon_id . ' .tab-content4-3-1 input[type="date"] {
+                    width: 50%; 
+                    max-width: 50%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4-1 select,
+                ' . $addon_id . ' .tab-content4-4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-5-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5-1 select,
+                ' . $addon_id . ' .tab-content4-5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1-1 select,
+                ' . $addon_id . ' .tab-content4-1-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="text"],
+                ' . $addon_id . ' .tab-content5 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                ' . $addon_id . ' .tab-content5-1 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content5-1 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                
+                ' . $addon_id . ' .tab-content6 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6 input[type="text"],
+                ' . $addon_id . ' .tab-content6 select,
+                ' . $addon_id . ' .tab-content6 input[type="date"],
+                ' . $addon_id . ' .tab-content6 input[type="number"],
+                ' . $addon_id . ' .tab-content6 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1 select,
+                ' . $addon_id . ' .tab-content6-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1-1 select,
+                ' . $addon_id . ' .tab-content6-1-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            }
+            ';
+            $css .= '
+            @media (max-width: 390px) {
+                ' . $addon_id . ' .sppb-addon {
+                    max-width: calc(100% - 20px);
+                    padding: 10px;
+                }
+                ' . $addon_id . ' input[type="file"] {
+                    font-size: 12px;
+                }
+            
+                ' . $addon_id . ' .tab {
+                    padding: 6px 6px !important; 
+                    max-width: calc(100% - 10px); 
+                    overflow-x: auto;
+                    font-size: 9px !important;
+                }
+
+                ' . $addon_id . ' .tab  span {
+                    font-size: 5px;
+                }
+            
+                ' . $addon_id . ' .tab-content {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 105px;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex; 
+                    justify-content: center;
+                    align-items: center; 
+                }
+            
+                ' . $addon_id . ' .tab-content-1 {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 101%;
+                }
+                
+                ' . $addon_id . ' .container {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center; 
+                    flex-wrap: wrap;
+                }
+               
+                
+                ' . $addon_id . ' .invoice-number {
+                    font-size: 14px; 
+                    margin-top: 5px; 
+                }
+                
+                ' . $addon_id . ' .button-group button {
+                    font-size: 10px; 
+                    margin-left: 2px;
+                }
+        
+                ' . $addon_id . ' .form-group {
+                    margin-bottom: 1rem; 
+                    flex-direction: column; 
+                    align-items: center;
+                    justify-content: center;
+                }
+        
+               
+                ' . $addon_id . ' .status-text {
+                    font-size: 10px;
+                    margin-top: 0.2em; 
+                }
+        
+                
+                ' . $addon_id . ' .form-control,
+                ' . $addon_id . ' #document_upload,
+                ' . $addon_id . ' select {
+                    border-radius: 8px;
+                    border: 2px solid #3498db;
+                    font-size: 12px; 
+                    margin-bottom: 0.5em;
+                    box-sizing: border-box;
+                    width: calc(100% - 2em); 
+                    padding: 0.3em; 
+                }
+
+                ' . $addon_id . ' .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                }
+                ' . $addon_id . ' .form-group .btn,
+                ' . $addon_id . ' .form-group .btn-danger,
+                ' . $addon_id . ' .form-group .btn-primary,
+                ' . $addon_id . ' .form-group .btn-warning {
+                    border-radius: 8px;
+                    padding: 0.5em 1em; 
+                    font-size: 12px; 
+                    margin-top: 1.5em; 
+                    margin-left: auto; 
+                    margin-right: auto; 
+                    display: block; 
+                }
+                
+                ' . $addon_id . ' form {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                ' . $addon_id . ' .tab-content2 {
+                    position: relative;
+                    background-color: #E2FAE1; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 135px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' .tab-content2 .img-container2 img {
+                    width: 486px;
+                    height: auto;
+                    max-width: 100%; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;    
+                }                   
+            
+                ' . $addon_id . ' .tab-content2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                ' . $addon_id . ' .tab-content2-1 {
+                    position: relative;
+                    background-color: #E2FAE1;
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                
+                ' . $addon_id . ' .tab-content3 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 50%;
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+                ' . $addon_id . ' .tab-content3 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3.empty-packs {
+                    padding: 10px 168px;  
+                }                    
+            
+                ' . $addon_id . ' .tab-content3 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 input[type="text"],
+                ' . $addon_id . ' .tab-content3 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content3-1 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3-1.empty-packs {
+                    padding: 10px 10px !important;   
+                }                    
+            
+                ' . $addon_id . ' .tab-content3-1 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 29%; 
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content3-1 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="text"],
+                ' . $addon_id . ' .tab-content4 select,
+                ' . $addon_id . ' .tab-content4 input[type="date"],
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    width: 480px;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4 select,
+                ' . $addon_id . ' .tab-content4-4 input[type="date"] {
+                    width: 100%;
+                    max-width: 100px;
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-3 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+                ' . $addon_id . ' .tab-content4-3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3 select,
+                ' . $addon_id . ' .tab-content4-3 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1 select,
+                ' . $addon_id . ' .tab-content4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-5 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5 select,
+                ' . $addon_id . ' .tab-content4-5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2-1 select{
+                    width: 100%; 
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 {
+                    position: relative;
+                    background-color: #FEDFF0;
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 10px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%; /* Reduced width */
+                    
+                }
+                ' . $addon_id . ' .tab-content4-3-1 .img-container2 img {
+                    max-width: 20px; 
+                    max-height: 20px; 
+                }
+
+                ' . $addon_id . ' .tab-content4-3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3-1 select,
+                ' . $addon_id . ' .tab-content4-3-1 input[type="date"] {
+                    width: 50%; 
+                    max-width: 50%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4-1 select,
+                ' . $addon_id . ' .tab-content4-4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-5-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5-1 select,
+                ' . $addon_id . ' .tab-content4-5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1-1 select,
+                ' . $addon_id . ' .tab-content4-1-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="text"],
+                ' . $addon_id . ' .tab-content5 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                ' . $addon_id . ' .tab-content5-1 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content5-1 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                
+                ' . $addon_id . ' .tab-content6 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6 input[type="text"],
+                ' . $addon_id . ' .tab-content6 select,
+                ' . $addon_id . ' .tab-content6 input[type="date"],
+                ' . $addon_id . ' .tab-content6 input[type="number"],
+                ' . $addon_id . ' .tab-content6 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1 select,
+                ' . $addon_id . ' .tab-content6-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1-1 select,
+                ' . $addon_id . ' .tab-content6-1-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            }
+            ';
+            $css .= '
+            @media (max-width: 375px) {
+                ' . $addon_id . ' .sppb-addon {
+                    max-width: calc(100% - 20px);
+                    padding: 10px;
+                }
+                ' . $addon_id . ' input[type="file"] {
+                    font-size: 12px;
+                }
+            
+                ' . $addon_id . ' .tab {
+                    padding: 7px 7px !important; 
+                    max-width: calc(100% - 10px); 
+                    overflow-x: auto;
+                    font-size: 8px !important;
+                }
+
+                ' . $addon_id . ' .tab  span {
+                    font-size: 5px;
+                }
+            
+                ' . $addon_id . ' .tab-content {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 105px;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex; 
+                    justify-content: center;
+                    align-items: center; 
+                }
+            
+                ' . $addon_id . ' .tab-content-1 {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 101%;
+                }
+                
+                ' . $addon_id . ' .container {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center; 
+                    flex-wrap: wrap;
+                }
+               
+                
+                ' . $addon_id . ' .invoice-number {
+                    font-size: 14px; 
+                    margin-top: 5px; 
+                }
+                
+                ' . $addon_id . ' .button-group button {
+                    font-size: 10px; 
+                    margin-left: 2px;
+                }
+        
+                ' . $addon_id . ' .form-group {
+                    margin-bottom: 1rem; 
+                    flex-direction: column; 
+                    align-items: center;
+                    justify-content: center;
+                }
+        
+               
+                ' . $addon_id . ' .status-text {
+                    font-size: 10px;
+                    margin-top: 0.2em; 
+                }
+        
+                
+                ' . $addon_id . ' .form-control,
+                ' . $addon_id . ' #document_upload,
+                ' . $addon_id . ' select {
+                    border-radius: 8px;
+                    border: 2px solid #3498db;
+                    font-size: 12px; 
+                    margin-bottom: 0.5em;
+                    box-sizing: border-box;
+                    width: calc(100% - 2em); 
+                    padding: 0.3em; 
+                }
+
+                ' . $addon_id . ' .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                }
+                ' . $addon_id . ' .form-group .btn,
+                ' . $addon_id . ' .form-group .btn-danger,
+                ' . $addon_id . ' .form-group .btn-primary,
+                ' . $addon_id . ' .form-group .btn-warning {
+                    border-radius: 8px;
+                    padding: 0.5em 1em; 
+                    font-size: 12px; 
+                    margin-top: 1.5em; 
+                    margin-left: auto; 
+                    margin-right: auto; 
+                    display: block; 
+                }
+                
+                ' . $addon_id . ' form {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                ' . $addon_id . ' .tab-content2 {
+                    position: relative;
+                    background-color: #E2FAE1; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 135px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' .tab-content2 .img-container2 img {
+                    width: 486px;
+                    height: auto;
+                    max-width: 100%; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;    
+                }                   
+            
+                ' . $addon_id . ' .tab-content2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                ' . $addon_id . ' .tab-content2-1 {
+                    position: relative;
+                    background-color: #E2FAE1;
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                
+                ' . $addon_id . ' .tab-content3 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 50%;
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+                ' . $addon_id . ' .tab-content3 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3.empty-packs {
+                    padding: 10px 168px;  
+                }                    
+            
+                ' . $addon_id . ' .tab-content3 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 input[type="text"],
+                ' . $addon_id . ' .tab-content3 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content3-1 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3-1.empty-packs {
+                    padding: 10px 10px !important;   
+                }                    
+            
+                ' . $addon_id . ' .tab-content3-1 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 29%; 
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content3-1 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="text"],
+                ' . $addon_id . ' .tab-content4 select,
+                ' . $addon_id . ' .tab-content4 input[type="date"],
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    width: 480px;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4 select,
+                ' . $addon_id . ' .tab-content4-4 input[type="date"] {
+                    width: 100%;
+                    max-width: 100px;
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-3 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+                ' . $addon_id . ' .tab-content4-3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3 select,
+                ' . $addon_id . ' .tab-content4-3 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1 select,
+                ' . $addon_id . ' .tab-content4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-5 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5 select,
+                ' . $addon_id . ' .tab-content4-5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2-1 select{
+                    width: 100%; 
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 {
+                    position: relative;
+                    background-color: #FEDFF0;
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 10px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%; /* Reduced width */
+                    
+                }
+                ' . $addon_id . ' .tab-content4-3-1 .img-container2 img {
+                    max-width: 20px; 
+                    max-height: 20px; 
+                }
+
+                ' . $addon_id . ' .tab-content4-3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3-1 select,
+                ' . $addon_id . ' .tab-content4-3-1 input[type="date"] {
+                    width: 50%; 
+                    max-width: 50%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4-1 select,
+                ' . $addon_id . ' .tab-content4-4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-5-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5-1 select,
+                ' . $addon_id . ' .tab-content4-5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1-1 select,
+                ' . $addon_id . ' .tab-content4-1-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="text"],
+                ' . $addon_id . ' .tab-content5 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                ' . $addon_id . ' .tab-content5-1 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content5-1 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                
+                ' . $addon_id . ' .tab-content6 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6 input[type="text"],
+                ' . $addon_id . ' .tab-content6 select,
+                ' . $addon_id . ' .tab-content6 input[type="date"],
+                ' . $addon_id . ' .tab-content6 input[type="number"],
+                ' . $addon_id . ' .tab-content6 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1 select,
+                ' . $addon_id . ' .tab-content6-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1-1 select,
+                ' . $addon_id . ' .tab-content6-1-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            }
+            ';
+            $css .= '
+            @media (max-width: 360px) {
+                ' . $addon_id . ' .sppb-addon {
+                    max-width: calc(100% - 20px);
+                    padding: 10px;
+                }
+                ' . $addon_id . ' input[type="file"] {
+                    font-size: 12px;
+                }
+            
+                ' . $addon_id . ' .tab {
+                    padding: 6px 6px !important; 
+                    max-width: calc(100% - 10px); 
+                    overflow-x: auto;
+                    font-size: 8px !important;
+                }
+
+                ' . $addon_id . ' .tab  span {
+                    font-size: 5px;
+                }
+            
+                ' . $addon_id . ' .tab-content {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 105px;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex; 
+                    justify-content: center;
+                    align-items: center; 
+                }
+            
+                ' . $addon_id . ' .tab-content-1 {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 101%;
+                }
+                
+                ' . $addon_id . ' .container {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center; 
+                    flex-wrap: wrap;
+                }
+               
+                
+                ' . $addon_id . ' .invoice-number {
+                    font-size: 14px; 
+                    margin-top: 5px; 
+                }
+                
+                ' . $addon_id . ' .button-group button {
+                    font-size: 10px; 
+                    margin-left: 2px;
+                }
+        
+                ' . $addon_id . ' .form-group {
+                    margin-bottom: 1rem; 
+                    flex-direction: column; 
+                    align-items: center;
+                    justify-content: center;
+                }
+        
+               
+                ' . $addon_id . ' .status-text {
+                    font-size: 10px;
+                    margin-top: 0.2em; 
+                }
+        
+                
+                ' . $addon_id . ' .form-control,
+                ' . $addon_id . ' #document_upload,
+                ' . $addon_id . ' select {
+                    border-radius: 8px;
+                    border: 2px solid #3498db;
+                    font-size: 12px; 
+                    margin-bottom: 0.5em;
+                    box-sizing: border-box;
+                    width: calc(100% - 2em); 
+                    padding: 0.3em; 
+                }
+
+                ' . $addon_id . ' .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                }
+                ' . $addon_id . ' .form-group .btn,
+                ' . $addon_id . ' .form-group .btn-danger,
+                ' . $addon_id . ' .form-group .btn-primary,
+                ' . $addon_id . ' .form-group .btn-warning {
+                    border-radius: 8px;
+                    padding: 0.5em 1em; 
+                    font-size: 12px; 
+                    margin-top: 1.5em; 
+                    margin-left: auto; 
+                    margin-right: auto; 
+                    display: block; 
+                }
+                
+                ' . $addon_id . ' form {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                ' . $addon_id . ' .tab-content2 {
+                    position: relative;
+                    background-color: #E2FAE1; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 135px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' .tab-content2 .img-container2 img {
+                    width: 486px;
+                    height: auto;
+                    max-width: 100%; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;    
+                }                   
+            
+                ' . $addon_id . ' .tab-content2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                ' . $addon_id . ' .tab-content2-1 {
+                    position: relative;
+                    background-color: #E2FAE1;
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                
+                ' . $addon_id . ' .tab-content3 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 50%;
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+                ' . $addon_id . ' .tab-content3 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3.empty-packs {
+                    padding: 10px 168px;  
+                }                    
+            
+                ' . $addon_id . ' .tab-content3 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 input[type="text"],
+                ' . $addon_id . ' .tab-content3 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content3-1 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3-1.empty-packs {
+                    padding: 10px 10px !important;   
+                }                    
+            
+                ' . $addon_id . ' .tab-content3-1 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 29%; 
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content3-1 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="text"],
+                ' . $addon_id . ' .tab-content4 select,
+                ' . $addon_id . ' .tab-content4 input[type="date"],
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    width: 480px;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4 select,
+                ' . $addon_id . ' .tab-content4-4 input[type="date"] {
+                    width: 100%;
+                    max-width: 100px;
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-3 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+                ' . $addon_id . ' .tab-content4-3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3 select,
+                ' . $addon_id . ' .tab-content4-3 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1 select,
+                ' . $addon_id . ' .tab-content4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-5 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5 select,
+                ' . $addon_id . ' .tab-content4-5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2-1 select{
+                    width: 100%; 
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 {
+                    position: relative;
+                    background-color: #FEDFF0;
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 10px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%; /* Reduced width */
+                    
+                }
+                ' . $addon_id . ' .tab-content4-3-1 .img-container2 img {
+                    max-width: 20px; 
+                    max-height: 20px; 
+                }
+
+                ' . $addon_id . ' .tab-content4-3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3-1 select,
+                ' . $addon_id . ' .tab-content4-3-1 input[type="date"] {
+                    width: 50%; 
+                    max-width: 50%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4-1 select,
+                ' . $addon_id . ' .tab-content4-4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-5-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5-1 select,
+                ' . $addon_id . ' .tab-content4-5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1-1 select,
+                ' . $addon_id . ' .tab-content4-1-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="text"],
+                ' . $addon_id . ' .tab-content5 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                ' . $addon_id . ' .tab-content5-1 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content5-1 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                
+                ' . $addon_id . ' .tab-content6 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6 input[type="text"],
+                ' . $addon_id . ' .tab-content6 select,
+                ' . $addon_id . ' .tab-content6 input[type="date"],
+                ' . $addon_id . ' .tab-content6 input[type="number"],
+                ' . $addon_id . ' .tab-content6 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1 select,
+                ' . $addon_id . ' .tab-content6-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1-1 select,
+                ' . $addon_id . ' .tab-content6-1-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            }
+            ';
+            $css .= '
+            @media (max-width: 345px) {
+                ' . $addon_id . ' .sppb-addon {
+                    max-width: calc(100% - 20px);
+                    padding: 10px;
+                }
+                ' . $addon_id . ' input[type="file"] {
+                    font-size: 12px;
+                }
+            
+                ' . $addon_id . ' .tab {
+                    padding: 7px 7px !important; 
+                    max-width: calc(100% - 10px); 
+                    overflow-x: auto;
+                    font-size: 7px !important;
+                }
+
+                ' . $addon_id . ' .tab  span {
+                    font-size: 5px;
+                }
+            
+                ' . $addon_id . ' .tab-content {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 105px;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex; 
+                    justify-content: center;
+                    align-items: center; 
+                }
+            
+                ' . $addon_id . ' .tab-content-1 {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 101%;
+                }
+                
+                ' . $addon_id . ' .container {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center; 
+                    flex-wrap: wrap;
+                }
+               
+                
+                ' . $addon_id . ' .invoice-number {
+                    font-size: 14px; 
+                    margin-top: 5px; 
+                }
+                
+                ' . $addon_id . ' .button-group button {
+                    font-size: 10px; 
+                    margin-left: 2px;
+                }
+        
+                ' . $addon_id . ' .form-group {
+                    margin-bottom: 1rem; 
+                    flex-direction: column; 
+                    align-items: center;
+                    justify-content: center;
+                }
+        
+               
+                ' . $addon_id . ' .status-text {
+                    font-size: 10px;
+                    margin-top: 0.2em; 
+                }
+        
+                
+                ' . $addon_id . ' .form-control,
+                ' . $addon_id . ' #document_upload,
+                ' . $addon_id . ' select {
+                    border-radius: 8px;
+                    border: 2px solid #3498db;
+                    font-size: 12px; 
+                    margin-bottom: 0.5em;
+                    box-sizing: border-box;
+                    width: calc(100% - 2em); 
+                    padding: 0.3em; 
+                }
+
+                ' . $addon_id . ' .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                }
+                ' . $addon_id . ' .form-group .btn,
+                ' . $addon_id . ' .form-group .btn-danger,
+                ' . $addon_id . ' .form-group .btn-primary,
+                ' . $addon_id . ' .form-group .btn-warning {
+                    border-radius: 8px;
+                    padding: 0.5em 1em; 
+                    font-size: 12px; 
+                    margin-top: 1.5em; 
+                    margin-left: auto; 
+                    margin-right: auto; 
+                    display: block; 
+                }
+                
+                ' . $addon_id . ' form {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                ' . $addon_id . ' .tab-content2 {
+                    position: relative;
+                    background-color: #E2FAE1; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 135px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' .tab-content2 .img-container2 img {
+                    width: 486px;
+                    height: auto;
+                    max-width: 100%; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;    
+                }                   
+            
+                ' . $addon_id . ' .tab-content2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                ' . $addon_id . ' .tab-content2-1 {
+                    position: relative;
+                    background-color: #E2FAE1;
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                
+                ' . $addon_id . ' .tab-content3 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 50%;
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+                ' . $addon_id . ' .tab-content3 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3.empty-packs {
+                    padding: 10px 168px;  
+                }                    
+            
+                ' . $addon_id . ' .tab-content3 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 input[type="text"],
+                ' . $addon_id . ' .tab-content3 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content3-1 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3-1.empty-packs {
+                    padding: 10px 10px !important;   
+                }                    
+            
+                ' . $addon_id . ' .tab-content3-1 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 29%; 
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content3-1 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="text"],
+                ' . $addon_id . ' .tab-content4 select,
+                ' . $addon_id . ' .tab-content4 input[type="date"],
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    width: 480px;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4 select,
+                ' . $addon_id . ' .tab-content4-4 input[type="date"] {
+                    width: 100%;
+                    max-width: 100px;
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-3 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+                ' . $addon_id . ' .tab-content4-3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3 select,
+                ' . $addon_id . ' .tab-content4-3 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1 select,
+                ' . $addon_id . ' .tab-content4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-5 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5 select,
+                ' . $addon_id . ' .tab-content4-5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2-1 select{
+                    width: 100%; 
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 {
+                    position: relative;
+                    background-color: #FEDFF0;
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 10px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%; /* Reduced width */
+                    
+                }
+                ' . $addon_id . ' .tab-content4-3-1 .img-container2 img {
+                    max-width: 20px; 
+                    max-height: 20px; 
+                }
+
+                ' . $addon_id . ' .tab-content4-3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3-1 select,
+                ' . $addon_id . ' .tab-content4-3-1 input[type="date"] {
+                    width: 50%; 
+                    max-width: 50%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4-1 select,
+                ' . $addon_id . ' .tab-content4-4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-5-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5-1 select,
+                ' . $addon_id . ' .tab-content4-5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1-1 select,
+                ' . $addon_id . ' .tab-content4-1-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="text"],
+                ' . $addon_id . ' .tab-content5 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                ' . $addon_id . ' .tab-content5-1 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content5-1 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                
+                ' . $addon_id . ' .tab-content6 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6 input[type="text"],
+                ' . $addon_id . ' .tab-content6 select,
+                ' . $addon_id . ' .tab-content6 input[type="date"],
+                ' . $addon_id . ' .tab-content6 input[type="number"],
+                ' . $addon_id . ' .tab-content6 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1 select,
+                ' . $addon_id . ' .tab-content6-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1-1 select,
+                ' . $addon_id . ' .tab-content6-1-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            }
+            ';
+            $css .= '
+            @media (max-width: 321px) {
+                ' . $addon_id . ' .sppb-addon {
+                    max-width: calc(100% - 20px);
+                    padding: 10px;
+                }
+                ' . $addon_id . ' input[type="file"] {
+                    font-size: 12px;
+                }
+            
+                ' . $addon_id . ' .tab {
+                    padding: 7px 7px !important; 
+                    max-width: calc(100% - 10px); 
+                    overflow-x: auto;
+                    font-size: 6px !important;
+                }
+
+                ' . $addon_id . ' .tab  span {
+                    font-size: 5px;
+                }
+            
+                ' . $addon_id . ' .tab-content {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 105px;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex; 
+                    justify-content: center;
+                    align-items: center; 
+                }
+            
+                ' . $addon_id . ' .tab-content-1 {
+                    position: relative;
+                    background-color: #DBE9FF; 
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 101%;
+                }
+                
+                ' . $addon_id . ' .container {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center; 
+                    flex-wrap: wrap;
+                }
+               
+                
+                ' . $addon_id . ' .invoice-number {
+                    font-size: 14px; 
+                    margin-top: 5px; 
+                }
+                
+                ' . $addon_id . ' .button-group button {
+                    font-size: 10px; 
+                    margin-left: 2px;
+                }
+        
+                ' . $addon_id . ' .form-group {
+                    margin-bottom: 1rem; 
+                    flex-direction: column; 
+                    align-items: center;
+                    justify-content: center;
+                }
+        
+               
+                ' . $addon_id . ' .status-text {
+                    font-size: 10px;
+                    margin-top: 0.2em; 
+                }
+        
+                
+                ' . $addon_id . ' .form-control,
+                ' . $addon_id . ' #document_upload,
+                ' . $addon_id . ' select {
+                    border-radius: 8px;
+                    border: 2px solid #3498db;
+                    font-size: 12px; 
+                    margin-bottom: 0.5em;
+                    box-sizing: border-box;
+                    width: calc(100% - 2em); 
+                    padding: 0.3em; 
+                }
+
+                ' . $addon_id . ' .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                }
+                ' . $addon_id . ' .form-group .btn,
+                ' . $addon_id . ' .form-group .btn-danger,
+                ' . $addon_id . ' .form-group .btn-primary,
+                ' . $addon_id . ' .form-group .btn-warning {
+                    border-radius: 8px;
+                    padding: 0.5em 1em; 
+                    font-size: 12px; 
+                    margin-top: 1.5em; 
+                    margin-left: auto; 
+                    margin-right: auto; 
+                    display: block; 
+                }
+                
+                ' . $addon_id . ' form {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                ' . $addon_id . ' .tab-content2 {
+                    position: relative;
+                    background-color: #E2FAE1; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 135px; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                }
+            
+                ' . $addon_id . ' .tab-content2 .img-container2 img {
+                    width: 486px;
+                    height: auto;
+                    max-width: 100%; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;    
+                }                   
+            
+                ' . $addon_id . ' .tab-content2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                ' . $addon_id . ' .tab-content2-1 {
+                    position: relative;
+                    background-color: #E2FAE1;
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15); 
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #E2FAE1; 
+                }
+            
+                
+                ' . $addon_id . ' .tab-content3 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 50%;
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+                ' . $addon_id . ' .tab-content3 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3.empty-packs {
+                    padding: 10px 168px;  
+                }                    
+            
+                ' . $addon_id . ' .tab-content3 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3 input[type="text"],
+                ' . $addon_id . ' .tab-content3 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content3-1 {
+                    position: relative;
+                    background-color: #F1E8FC; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' #section3.tab-content3-1.empty-packs {
+                    padding: 10px 10px !important;   
+                }                    
+            
+                ' . $addon_id . ' .tab-content3-1 .img-container2 {
+                    width: 100%; 
+                    height: 100%; 
+                    position: relative; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .img-wrapper img {
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease-in-out;
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 .button-container {
+                    position: absolute; 
+                    top: 110%; 
+                    left: 29%; 
+                    transform: translate(-50%, -50%); 
+                    z-index: 1; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #F1E8FC; 
+                }
+            
+                ' . $addon_id . ' .tab-content3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content3-1 select {
+                    width: 80%; 
+                    max-width: 80%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+            
+                ' . $addon_id . ' .tab-content4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="text"],
+                ' . $addon_id . ' .tab-content4 select,
+                ' . $addon_id . ' .tab-content4 input[type="date"],
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    width: 480px;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-4 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4 select,
+                ' . $addon_id . ' .tab-content4-4 input[type="date"] {
+                    width: 100%;
+                    max-width: 100px;
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-4 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-2 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-3 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+                ' . $addon_id . ' .tab-content4-3:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3 select,
+                ' . $addon_id . ' .tab-content4-3 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1 select,
+                ' . $addon_id . ' .tab-content4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-5 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5 select,
+                ' . $addon_id . ' .tab-content4-5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-5 input[type="file"] {
+                    font-size: 12px;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-2-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-2-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-2-1 select{
+                    width: 100%; 
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 {
+                    position: relative;
+                    background-color: #FEDFF0;
+                    border-radius: 0 0 20px 20px;
+                    padding: 10px 10px !important;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 100%; /* Reduced width */
+                    
+                }
+                ' . $addon_id . ' .tab-content4-3-1 .img-container2 img {
+                    max-width: 20px; 
+                    max-height: 20px; 
+                }
+
+                ' . $addon_id . ' .tab-content4-3-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-3-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-3-1 select,
+                ' . $addon_id . ' .tab-content4-3-1 input[type="date"] {
+                    width: 50%; 
+                    max-width: 50%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-4-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-4-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-4-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-4-1 select,
+                ' . $addon_id . ' .tab-content4-4-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                    
+                }
+                ' . $addon_id . ' .tab-content4-5-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0; 
+                }
+                ' . $addon_id . ' .tab-content4-5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-5-1 select,
+                ' . $addon_id . ' .tab-content4-5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px; 
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 {
+                    position: relative;
+                    background-color: #FEDFF0; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                    width: 101%;
+                }
+
+                ' . $addon_id . ' .tab-content4-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FEDFF0;
+                }
+                ' . $addon_id . ' .tab-content4-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content4-1-1 select,
+                ' . $addon_id . ' .tab-content4-1-1 input[type="date"] {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="text"],
+                ' . $addon_id . ' .tab-content5 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                ' . $addon_id . ' .tab-content5-1 {
+                    position: relative;
+                    background-color: #ffd8b2; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+
+                ' . $addon_id . ' .tab-content5-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #ffd8b2;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="text"],
+                ' . $addon_id . ' .tab-content5-1 select{
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content5-1 input[type="date"] {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                
+                
+                ' . $addon_id . ' .tab-content6 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6 input[type="text"],
+                ' . $addon_id . ' .tab-content6 select,
+                ' . $addon_id . ' .tab-content6 input[type="date"],
+                ' . $addon_id . ' .tab-content6 input[type="number"],
+                ' . $addon_id . ' .tab-content6 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%; 
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1 select,
+                ' . $addon_id . ' .tab-content6-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 {
+                    position: relative;
+                    background-color: #FFF5BA; 
+                    border-radius: 0 0 20px 20px; 
+                    padding: 10px 20px !important;
+                    width: 101%;
+                    transition: background-color 0.3s ease;
+                    border: 1px solid #ccc; 
+                    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                    margin-top: -12px;
+                }
+    
+                ' . $addon_id . ' .tab-content6-1-1:before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-top: 10px solid #FFF5BA;
+                }
+                ' . $addon_id . ' .tab-content6-1-1 input[type="text"],
+                ' . $addon_id . ' .tab-content6-1-1 select,
+                ' . $addon_id . ' .tab-content6-1-1 input[type="date"],
+                ' . $addon_id . ' .tab-content6-1-1 input[type="number"],
+                ' . $addon_id . ' .tab-content6-1-1 textarea {
+                    width: 100%; 
+                    max-width: 100%; 
+                    padding: 5px;
+                    box-sizing: border-box; 
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            }
+            ';
+
         $css .= '
         @media (min-width: 769px) {
             ' . $addon_id . ' .form-group {
@@ -6878,16 +16195,6 @@ class SppagebuilderAddonTracking extends SppagebuilderAddons
                 
             }
             
-            ' . $addon_id . ' .img-container2 img {
-                width: 100%;
-                height: auto;
-                max-width: 100%; 
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-                transition: all 0.3s ease-in-out;
-                
-                
-            }
             
             ' . $addon_id . ' .invoice-number {
                 font-size: 14px; 
