@@ -71,37 +71,36 @@ class plgHikashopWordtoimage extends hikashopPlugin {
         $imageToInsert = $pluginParams->image_to_insert;
         $link = isset($pluginParams->link) ? $pluginParams->link : [];
         $language = JFactory::getLanguage()->getTag();
-        
+        echo $language;
         if (is_array($wordToReplace)) {
             foreach ($wordToReplace as $index => $word) {
-                // Define el patrón de búsqueda excluyendo las etiquetas <a>, <li>, <select> y <option>
-                $pattern = '/(<(a|li|select|option)[^>]*>.*?<\/\2>(*SKIP)(*FAIL))|' . preg_quote($word, '/') . '/i';
+                $pattern = '/(<input\s+[^>]*\btype\s*=\s*["\']?hidden["\']?[^>]*>|<(a|li|select|option)[^>]*>.*?<\/\2>(*SKIP)(*FAIL))|' . preg_quote($word, '/') . '/i';
                 $content = preg_replace_callback(
                     $pattern,
                     function ($matches) use ($word, $imageToInsert, $link, $index, $language) {
-                        // Si coincide con una etiqueta <a>, <li>, <select> o <option>, devolver la coincidencia sin cambios
                         if (!empty($matches[1])) {
                             return $matches[1];
                         }
-    
                         $wordpage = $word . "_" . $language;
-    
-                        // Determine el enlace apropiado
-                        if ($wordpage == 'Dielectrico_es-ES') {
-                            $linkpage = "https://mwt.one/index.php?option=com_sppagebuilder&view=page&id=41";
-                        } elseif ($wordpage == 'Dielectrico_en-US') {
-                            $linkpage = "https://mwt.one/index.php?option=com_sppagebuilder&view=page&id=42";
-                        } else {
-                            $linkpage = isset($link[$index]) ? $link[$index] : '#';
-                        }
-    
-                        // Genera la etiqueta de imagen
-                        $imageTag = '<a href="' . $linkpage . '" target="_blank"><img src="' . $imageToInsert[$index] . '" alt="' . $word . '" title="' . $word . '" width="50" height="50" style="display: inline-block;"/></a>';
+                        $route = $this->getRouteFromDatabase($wordpage);
+                        $linkpage = $route ? "https://mwt.one/" . $route : (isset($link[$index]) ? $link[$index] : '#');
+                        
+                        $imageTag = '<a href="' . $linkpage . '" target="_blank"><img src="' . $imageToInsert[$index] . '" alt="' . $word . '" title="' . $word . '" width="70" height="70" style="display: inline-block;"/></a>';
                         return $imageTag;
                     },
                     $content
                 );
             }
         }
+    }
+    private function getRouteFromDatabase($wordpage) {
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true)
+            ->select($db->quoteName('route'))
+            ->from($db->quoteName('josmwt_finder_links'))
+            ->where($db->quoteName('title') . ' = ' . $db->quote($wordpage));
+        $db->setQuery($query);
+        $route = $db->loadResult();
+        return $route;
     }   
 }
