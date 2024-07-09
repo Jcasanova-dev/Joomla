@@ -40,6 +40,23 @@
             $output .= '<form action="' . $_SERVER['PHP_SELF'] . '" method="post" enctype="multipart/form-data">';
             $output .= '<div>';
             $output .= '<br>';
+            $output .= '<label for="client_type">Tipo de Solicitud</label>';
+            $output .= '<select id="solicitud_type" name="solicitud_type" required>';
+            $output .= '<option value="Nuevo Desarrollo">Nuevo Desarrollo</option>';
+            $output .= '<option value="Busqueda de Referencia">Busqueda de Referencia</option>';
+            $output .= '<option value="Adquirir Nuestros Productos">Adquirir Nuestros Productos</option>';
+            $output .= '</select>';
+            $output .= '</div>';
+            $output .= '<div>';
+            $output .= '<br>';
+            $output .= '<label for="client_type">Tipo de Cliente</label>';
+            $output .= '<select id="client_type" name="client_type" required>';
+            $output .= '<option value="Natural">Empresa - Usuario Final</option>';
+            $output .= '<option value="Empresa">Empresa - Distribuidora</option>';
+            $output .= '</select>';
+            $output .= '</div>';
+            $output .= '<div>';
+            $output .= '<br>';
             $output .= '<label for="name">Nombre Completo</label>';
             $output .= '<input type="text" id="name" name="name" ';
             $output .= 'oninput="validateCompanyName(this)" required>';
@@ -57,15 +74,7 @@
             $output .= '    }';
             $output .= '}';
             $output .= '</script>';
-            $output .= '<div>';
-            $output .= '<br>';
-            $output .= '<label for="client_type">Tipo de Cliente</label>';
-            $output .= '<select id="client_type" name="client_type" required>';
-            $output .= '<option value="Natural">Natural</option>';
-            $output .= '<option value="Empresa">Empresa</option>';
-            $output .= '<option value="Distribuidor">Distribuidor</option>';
-            $output .= '</select>';
-            $output .= '</div>';
+
             $output .= '<div>';
             $output .= '<br>';
             $output .= '<label for="email_address">Email</label>';
@@ -91,7 +100,7 @@
             $countrys = $this->getpais();
             if (!empty($countrys)) {
                 foreach ($countrys as $country) {
-                    $output .= '<option value="' . $country['id'] . '">' . $country['nombre'] . '</option>';
+                    $output .= '<option value="' . $country['id'] . '">' . $country['nombre'] . ' (' . $country['codigo_telefono'] . ')</option>';
                 }
             } else {
                 $output .= '<option value="">No countrys found</option>';
@@ -152,6 +161,14 @@
             $output .= '    countElement.textContent = "Caracteres restantes: " + remainingCharacters;';
             $output .= '}';
             $output .= '</script>';
+            $output .= '<div>';
+            $output .= '<br>';
+            $output .= '<label for="document_upload">Subir Información Adiccional </label>';
+            $output .= '<br>';
+            $output .= '<input type="file" id="file_upload" name="file_upload" accept=".pdf, .jpg, .jpeg">';
+            $output .= '<p>Solo se permiten archivos .pdf , .jpg y .jpeg</p>';
+            $output .= '<p>Solo se permiten archivos maximo 20MB</p>';
+            $output .= '</div>';
             $output .= '<br>';
             $output .= '<input type="submit" name="submit_form" class="btn btn-primary" value="Enviar">';
             $output .= '</form>';
@@ -166,28 +183,52 @@
                     $additional = htmlspecialchars($_POST['additional']);
                     $city = htmlspecialchars($_POST['city']);
                     $clientType = htmlspecialchars($_POST['client_type']);
+                    $solicitudType = htmlspecialchars($_POST['solicitud_type']);
+                    $file = $_FILES['file_upload'];
                     $countrys = $this->getpais();
                     $countryName = '';
+                    $countryCodigo = '';
                     if (!empty($countrys)) {
                         foreach ($countrys as $countryData) {
                             if ($countryData['id'] == $country) {
                                 $countryName = $countryData['nombre'];
+                                $countryCodigo = $countryData['codigo_telefono'];
                                 break;
                             }
                         }
                     }
-                    $body = "<p>Nombre: $company</p>";
+                    $body = "<p>Tipo de Solicitud: $solicitudType</p>";
                     $body = "<p>Tipo de Cliente: $clientType</p>";
+                    $body = "<p>Nombre: $company</p>";
                     $body .= "<p>Correo electrónico: $emailAddress</p>";
                     $body .= "<p>Country: $countryName</p>";
                     $body .= "<p>City: $city</p>";
-                    $body .= "<p>Número de teléfono: $phoneNumber</p>";
+                    $body .= "<p>Número de teléfono: " . $countryCodigo . $phoneNumber . "</p>";
                     $body .= "<p>Comentarios: $additional</p>";
                     $to2 = 'alejandro@muitowork.com';
                     $to = 'alvaro@muitowork.com';
-                    $subject = "Dudas o Comentarios";
-                    $this->sendEmail($to, $to2, $subject, $body);
-                    echo '<script>alert("El formulario se envió con éxito.");</script>';
+                    $subject = $solicitudType;
+                    if (!empty($file['tmp_name']) && is_uploaded_file($file['tmp_name'])) {
+                        $allowedTypes = array('application/pdf', 'image/jpeg');
+                        $maxFileSize = 1024 * 1024 * 20; // 20MB
+
+                        if (!in_array($file['type'], $allowedTypes)) {
+                            throw new Exception('Tipo de archivo no permitido');
+                        }
+
+                        if ($file['size'] > $maxFileSize) {
+                            throw new Exception('Tamaño de archivo demasiado grande');
+                        }
+
+                        $tempFile = tempnam(sys_get_temp_dir(), 'upload_');
+                        move_uploaded_file($file['tmp_name'], $tempFile);
+
+                        $this->sendEmail($to, $to2, $subject, $body, $tempFile, $file['name']);
+                        echo '<script>alert("El formulario se envió con éxito.");</script>';
+                    } else {
+                        $this->sendEmail($to, $to2, $subject, $body);
+                        echo '<script>alert("El formulario se envió con éxito.");</script>';
+                    }
                 } catch (Exception $e) {
                     JFactory::getDocument()->addScriptDeclaration('
                     document.addEventListener("DOMContentLoaded", function() {
@@ -203,14 +244,14 @@
         {
             $db = JFactory::getDbo();
             $query = $db->getQuery(true);
-            $query->select($db->quoteName(['id', 'nombre']));
+            $query->select($db->quoteName(['id', 'nombre', 'codigo_telefono']));
             $query->from($db->quoteName('paises'));
             $db->setQuery($query);
             $results = $db->loadAssocList();
 
             return $results;
         }
-        public function sendEmail($to, $to2, $subject, $body)
+        public function sendEmail($to, $to2, $subject, $body, $file = null, $fileName = null)
         {
             try {
                 $config = JFactory::getConfig();
@@ -234,6 +275,10 @@
                 $mail->setSubject($subject);
                 $mail->setBody($body);
                 $mail->isHtml(true);
+
+                if (!empty($file) && !empty($fileName)) {
+                    $mail->addAttachment($file, $fileName);
+                }
                 $mail->send();
             } catch (Exception $e) {
                 JFactory::getApplication()->enqueueMessage('Error sending email: ' . $e->getMessage(), 'error');
